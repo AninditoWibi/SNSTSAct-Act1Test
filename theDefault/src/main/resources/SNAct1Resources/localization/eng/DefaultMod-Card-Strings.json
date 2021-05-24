@@ -1,0 +1,53 @@
+{
+  "SNAct1:DefaultCommonAttack": {
+    "NAME": "Strike",
+    "DESCRIPTION": "Deal !D! damage. NL [#0000ff]This[] [#ff0000]Is[] [#ffff00]How[] [#88888]color[] [#ff00ff]works.[]"
+  },
+  "SNAct1:DefaultCommonSkill": {
+    "NAME": "Defend",
+    "DESCRIPTION": "Gain !B! Block. NL snact1:Multiword_Keyword."
+  },
+  "SNAct1:DefaultCommonPower": {
+    "NAME": "Hold Place",
+    "DESCRIPTION": "Gain !M! snact1:Keyword.",
+    "UPGRADE_DESCRIPTION": "Gain !M! snact1:Keywords."
+  },
+  "SNAct1:DefaultUncommonAttack": {
+    "NAME": "Big slap",
+    "DESCRIPTION": "Deal !D! damage."
+  },
+  "SNAct1:DefaultUncommonSkill": {
+    "NAME": "A Better Defend",
+    "DESCRIPTION": "Gain !B! Plated Armor. Affected by Dexterity."
+  },
+  "SNAct1:DefaultUncommonPower": {
+    "NAME": "Weirdness",
+    "DESCRIPTION": "Gain X snact1:Keywords.",
+    "UPGRADE_DESCRIPTION": "Gain X +1 snact1:Keywords."
+  },
+  "SNAct1:DefaultRareAttack": {
+    "NAME": "TOUCH",
+    "DESCRIPTION": "Deal !D! damage."
+  },
+  "SNAct1:DefaultRareSkill": {
+    "NAME": "For Each Loop x2",
+    "DESCRIPTION": "Apply !M! Vulnerable to all enemies, 2 times.",
+    "UPGRADE_DESCRIPTION": "Apply !M! Vulnerable to all enemies, 3 times."
+  },
+  "SNAct1:DefaultRarePower": {
+    "NAME": "In-Progress Form",
+    "DESCRIPTION": "At the start of your turn, play a TOUCH."
+  },
+  "SNAct1:DefaultAttackWithVariable": {
+    "NAME": "Special Strike",
+    "DESCRIPTION": "Deal !D! damage [E] times. NL (Deal !SNAct1:ENERGY_DAMAGE! damage total.)"
+  },
+  "SNAct1:DefaultSecondMagicNumberSkill": {
+    "NAME": "Cool 2 Number Card",
+    "DESCRIPTION": "Apply !M! Vulnerable and !SNAct1:SecondMagic! poison to an enemy."
+  },
+  "SNAct1:OrbSkill": {
+    "NAME": "Get Orb",
+    "DESCRIPTION": "Channel 1 Default Orb."
+  }
+}
