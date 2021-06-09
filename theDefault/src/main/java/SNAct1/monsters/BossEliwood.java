@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.actions.animations.TalkAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
+import com.megacrit.cardcrawl.actions.common.RollMoveAction;
 import com.megacrit.cardcrawl.actions.utility.SFXAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -71,7 +72,7 @@ public class BossEliwood extends AbstractAllyCardMonster {
     private boolean firstMove = true;
 
     public BossEliwood(final float x, final float y) {
-        super(BossEliwood.NAME, ID, ELIWOOD_HP, -5.0F, 0, 555.0f, 415.0f, IMG, x, y);
+        super(BossEliwood.NAME, ID, ELIWOOD_HP, -5.0F, 0, 181.0f, 187.0f, IMG, x, y);
         this.type = EnemyType.BOSS;
         this.dialogX = (this.hb_x - 70.0F) * Settings.scale;
         this.dialogY -= (this.hb_y - 55.0F) * Settings.scale;
@@ -203,8 +204,8 @@ public class BossEliwood extends AbstractAllyCardMonster {
                 atb(new ApplyPowerAction(this, this, new ArcadianVisionPower(this, dmgBlockBuffBonus, dmgBlockBuffDuration, true)));
                 break;
             }
-
         }
+        atb(new RollMoveAction(this));
     }
 
     @Override
@@ -215,17 +216,20 @@ public class BossEliwood extends AbstractAllyCardMonster {
          * reduce str = 2, visions buff = 3
          * also applies to move array names
          * */
-        if (this.firstMove || this.lastMove(MOVE_CHILLATK)) {
+        if (this.firstMove) {
             setMoveShortcut(MOVE_DEATHBLOW, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
         }
         if (this.lastMove(MOVE_DEATHBLOW)) {
             setMoveShortcut(MOVE_MASSBLOCK, MOVES[1], cardList.get(1).makeStatEquivalentCopy());
         }
         if (this.lastMove(MOVE_MASSBLOCK)) {
-            setMoveShortcut(MOVE_DMGBLOCKBUFF, MOVES[3], cardList.get(0).makeStatEquivalentCopy());
+            setMoveShortcut(MOVE_DMGBLOCKBUFF, MOVES[3], cardList.get(3).makeStatEquivalentCopy());
         }
         if (this.lastMove(MOVE_DMGBLOCKBUFF)) {
             setMoveShortcut(MOVE_CHILLATK, MOVES[2], cardList.get(2).makeStatEquivalentCopy());
+        }
+        if (this.lastMove(MOVE_CHILLATK)) {
+            setMoveShortcut(MOVE_DEATHBLOW, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
         }
     }
 

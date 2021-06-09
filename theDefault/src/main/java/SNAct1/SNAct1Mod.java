@@ -2,6 +2,7 @@ package SNAct1;
 
 import SNAct1.CustomIntent.MassAttackIntent;
 import SNAct1.cards.cardvars.SecondMagicNumber;
+import SNAct1.monsters.BossEliwood;
 import SNAct1.monsters.BossNinian;
 import SNAct1.relics.*;
 import actlikeit.RazIntent.CustomIntent;
@@ -14,14 +15,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.evacipated.cardcrawl.mod.stslib.Keyword;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
-import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardHelper;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import org.apache.logging.log4j.LogManager;
@@ -80,24 +79,31 @@ public class SNAct1Mod implements
     private static String modID;
 
     // Mod-settings settings. This is if you want an on/off savable button
-    public static Properties theDefaultDefaultSettings = new Properties();
+    public static Properties SNAct1DefaultSettings = new Properties();
     public static final String ENABLE_PLACEHOLDER_SETTINGS = "enablePlaceholder";
     public static boolean enablePlaceholder = true; // The boolean we'll be setting on/off (true/false)
 
     //This is for the in-game mod settings panel.
-    private static final String MODNAME = "SN Act 1 Mod";
+    private static final String MODNAME = "SN Act 1 - Interdimensional Rifts";
     private static final String AUTHOR = "SolarNougat"; // And pretty soon - You!
     private static final String DESCRIPTION = "Test file for SN's act 1 mod.";
 
     // =============== INPUT TEXTURE LOCATION =================
 
+    // this adds "ModName:" before the ID of any card/relic/power etc.
+    // in order to avoid conflicts if any other mod uses the same ID.
+    public static String makeID(String idText) {
+        return getModID() + ":" + idText;
+    }
+
+    /*
     public static class Enums {
         @SpireEnum(name = "SNBOSSCARDS") // These two HAVE to have the same absolutely identical name.
         public static AbstractCard.CardColor EGO;
         @SpireEnum(name = "SNBOSSCARDS")
         @SuppressWarnings("unused")
         public static CardLibrary.LibraryType LIBRARY_COLOR;
-    }
+    } */
 
     // Colors (RGB)
     // Character Color
@@ -116,64 +122,55 @@ public class SNAct1Mod implements
     private static final String POWER_DEFAULT_GRAY_PORTRAIT = "SNAct1Resources/images/1024/bg_power_default_gray.png";
     private static final String ENERGY_ORB_DEFAULT_GRAY_PORTRAIT = "SNAct1Resources/images/1024/card_default_gray_orb.png";
 
-    // Character assets
-    private static final String THE_DEFAULT_BUTTON = "SNAct1Resources/images/charSelect/DefaultCharacterButton.png";
-    private static final String THE_DEFAULT_PORTRAIT = "SNAct1Resources/images/charSelect/DefaultCharacterPortraitBG.png";
-    public static final String THE_DEFAULT_SHOULDER_1 = "SNAct1Resources/images/char/defaultCharacter/shoulder.png";
-    public static final String THE_DEFAULT_SHOULDER_2 = "SNAct1Resources/images/char/defaultCharacter/shoulder2.png";
-    public static final String THE_DEFAULT_CORPSE = "SNAct1Resources/images/char/defaultCharacter/corpse.png";
 
     //Mod Badge - A small icon that appears in the mod settings menu next to your mod.
-    public static final String BADGE_IMAGE = "SNAct1Resources/images/Badge.png";
+    public static final String BADGE_IMAGE = getModID() + "Resources/images/Badge.png";
 
-    // Atlas and JSON files for the Animations
-    public static final String THE_DEFAULT_SKELETON_ATLAS = "SNAct1Resources/images/char/defaultCharacter/skeleton.atlas";
-    public static final String THE_DEFAULT_SKELETON_JSON = "SNAct1Resources/images/char/defaultCharacter/skeleton.json";
 
     // =============== MAKE IMAGE PATHS =================
 
     public static String makeCardPath(String resourcePath) {
-        return getModID() + "SNAct1Resources/images/cards/" + resourcePath;
+        return getModID() + "Resources/images/cards/" + resourcePath;
     }
 
     public static String makeRelicPath(String resourcePath) {
-        return getModID() + "SNAct1Resources/images/relics/" + resourcePath;
+        return getModID() + "Resources/images/relics/" + resourcePath;
     }
 
     public static String makeRelicOutlinePath(String resourcePath) {
-        return getModID() + "SNAct1Resources/images/relics/outline/" + resourcePath;
+        return getModID() + "Resources/images/relics/outline/" + resourcePath;
     }
 
     public static String makeOrbPath(String resourcePath) {
-        return getModID() + "SNAct1Resources/images/orbs/" + resourcePath;
+        return getModID() + "Resources/images/orbs/" + resourcePath;
     }
 
     public static String makePowerPath(String resourcePath) {
-        return getModID() + "SNAct1Resources/images/powers/" + resourcePath;
+        return getModID() + "Resources/images/powers/" + resourcePath;
     }
 
     public static String makeEventPath(String resourcePath) {
-        return getModID() + "SNAct1Resources/images/events/" + resourcePath;
+        return getModID() + "Resources/images/events/" + resourcePath;
     }
 
     public static String makeBossVoiceLinePath(String resourcePath) {
-        return modID + "SNAct1Resources/audio/bossvoice/" + resourcePath;
+        return modID + "Resources/audio/bossvoice/" + resourcePath;
     }
 
     public static String makeMusicPath(String resourcePath) {
-        return modID + "SNAct1Resources/audio/music/" + resourcePath;
+        return modID + "Resources/audio/music/" + resourcePath;
     }
 
     public static String makeMonsterPath(String resourcePath) {
-        return modID + "SNAct1Resources/images/monsters/" + resourcePath;
+        return modID + "Resources/images/monsters/" + resourcePath;
     }
 
     public static String makeUIPath(String resourcePath) {
-        return modID + "SNAct1Resources/images/ui/" + resourcePath;
+        return modID + "Resources/images/ui/" + resourcePath;
     }
 
     public static String makeImagePath(String resourcePath) {
-        return modID + "SNAct1Resources/images/" + resourcePath;
+        return modID + "Resources/images/" + resourcePath;
     }
 
     // =============== /INPUT TEXTURE LOCATION/ =================
@@ -185,24 +182,14 @@ public class SNAct1Mod implements
         logger.info("Subscribe to BaseMod hooks");
         BaseMod.subscribe(this);
         setModID("SNAct1");
-
-        // It's important that the mod ID prefix for keywords used in the cards descriptions is lowercase!
-
-        // 3. Scroll down (or search for "ADD CARDS") till you reach the ADD CARDS section, and follow the TODO instructions
-
-        // 4. FINALLY and most importantly: Scroll up a bit. You may have noticed the image locations above don't use getModID()
-        // Change their locations to reflect your actual ID rather than theDefault. They get loaded before getID is a thing.
-
         logger.info("Done subscribing");
-
-
 
         logger.info("Adding mod settings");
         // This loads the mod settings.
         // The actual mod Button is added below in receivePostInitialize()
-        theDefaultDefaultSettings.setProperty(ENABLE_PLACEHOLDER_SETTINGS, "FALSE"); // This is the default setting. It's actually set...
+        SNAct1DefaultSettings.setProperty(ENABLE_PLACEHOLDER_SETTINGS, "FALSE"); // This is the default setting. It's actually set...
         try {
-            SpireConfig config = new SpireConfig("defaultMod", "theDefaultConfig", theDefaultDefaultSettings); // ...right here
+            SpireConfig config = new SpireConfig("SNAct1Mod", "SNAct1Config", SNAct1DefaultSettings); // ...right here
             // the "fileName" parameter is the name of the file MTS will create where it will save our setting.
             config.load(); // Load the setting and set the boolean to equal it
             enablePlaceholder = config.getBool(ENABLE_PLACEHOLDER_SETTINGS);
@@ -256,7 +243,6 @@ public class SNAct1Mod implements
 
     // ====== YOU CAN EDIT AGAIN ======
 
-
     public static void initialize() {
         SNAct1Mod snmod = new SNAct1Mod();
     }
@@ -280,10 +266,11 @@ public class SNAct1Mod implements
         //custom Intent for terra, kefka, ninian
         CustomIntent.add(new MassAttackIntent());
 
-        BaseMod.addMonster(BossNinian.ID, (BaseMod.GetMonster) BossNinian::new);
-
-
-
+        BaseMod.addMonster(BossNinian.ID, "Boss-NinianEliwood", () -> new MonsterGroup(
+                new AbstractMonster[]{
+                        new BossEliwood(-550.0F, 0.0F),
+                        new BossNinian(200.0F, 0.0F),
+                }));
 
         logger.info("Done loading badge Image and mod options");
     }
@@ -337,8 +324,6 @@ public class SNAct1Mod implements
         // The ID for this function isn't actually your modid as used for prefixes/by the getModID() method.
         // It's the mod id you give MTS in ModTheSpire.json - by default your artifact ID in your pom.xml
 
-        //TODO: Rename the "DefaultMod" with the modid in your ModTheSpire.json file
-        //TODO: The artifact mentioned in ModTheSpire.json is the artifactId in pom.xml you should've edited earlier
         new AutoAdd("SNAct1") // ${project.artifactId}
                 .packageFilter(AbstractSNActCard.class) // filters to any class in the same package as AbstractDefaultCard, nested packages included
                 .setDefaultSeen(true)
@@ -360,26 +345,23 @@ public class SNAct1Mod implements
     public void receiveEditStrings() {
         logger.info("Beginning to edit strings for mod with ID: " + getModID());
 
-        // CardStrings
         BaseMod.loadCustomStringsFile(CardStrings.class,
                 getModID() + "Resources/localization/eng/Card-Strings.json");
 
-        // PowerStrings
         BaseMod.loadCustomStringsFile(PowerStrings.class,
                 getModID() + "Resources/localization/eng/Power-Strings.json");
 
-        // RelicStrings
         BaseMod.loadCustomStringsFile(RelicStrings.class,
                 getModID() + "Resources/localization/eng/Relic-Strings.json");
 
-        // Event Strings
         BaseMod.loadCustomStringsFile(EventStrings.class,
                 getModID() + "Resources/localization/eng/DefaultMod-Event-Strings.json");
 
-        // PotionStrings
-        BaseMod.loadCustomStringsFile(PotionStrings.class,
-                getModID() + "Resources/localization/eng/Potion-Strings.json");
+        BaseMod.loadCustomStringsFile(UIStrings.class,
+                getModID() + "Resources/localization/eng/UI-Strings.json");
 
+        BaseMod.loadCustomStringsFile(MonsterStrings.class,
+                getModID() + "Resources/localization/eng/Monster-Strings.json");
 
     }
 
@@ -411,11 +393,7 @@ public class SNAct1Mod implements
 
     // ================ /LOAD THE KEYWORDS/ ===================    
 
-    // this adds "ModName:" before the ID of any card/relic/power etc.
-    // in order to avoid conflicts if any other mod uses the same ID.
-    public static String makeID(String idText) {
-        return getModID() + ":" + idText;
-    }
+
 
     @Override
     public void receiveAddAudio() {

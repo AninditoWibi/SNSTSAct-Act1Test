@@ -5,10 +5,10 @@
     "DESCRIPTIONS": [
       "Starts with #b",
       " charges (max. #b",
-      " charges). Gain #b",
-      " charges whenever you complete a normal combat, #b",
-      " charges whenever you defeat an elite, and #b",
-      " charges whenever you defeat a boss. Once per combat, right click to activate: Spend #b",
+      "). Gain #b",
+      " charge for completing a normal combat, #b",
+      " charges for defeating an elite, and #b",
+      " charges for defeating a boss. Once per combat, right click to activate: Spend #b",
       " charges to gain #b",
       " #yStrength and #b",
       " #ySoul #yCharge."
@@ -18,7 +18,7 @@
     "NAME": "Sacred Flame",
     "FLAVOR": "A wisp of blessed fire that never burns out.",
     "DESCRIPTIONS": [
-      "The first #b", " times you exhaust a Status card each combat, heal #b", " HP."
+      "The first #b", " times you exhaust a #yStatus card each combat, heal #b", " HP."
     ]
   },
   "SNAct1:NinianIceDragonstone": {

@@ -26,7 +26,7 @@ public class TexLoader {
             try {
                 loadTexture(textureString, true);
             } catch (GdxRuntimeException e) {
-                return getTexture(makeImagePath("ui/missing.png"));
+                return getTexture(makeImagePath("ui/missing_texture.png"));
             }
         }
         return textures.get(textureString);

@@ -39,7 +39,8 @@ public class ArdentAspectPower extends TwoAmountPower {
         description = DESCRIPTIONS[0] + amount + DESCRIPTIONS[1] + amount2 + DESCRIPTIONS[2];
     }
 
-    public void atTurnStart() {
+    @Override
+    public void atStartOfTurn() {
         applyToTarget(AbstractDungeon.player, owner, new StrengthPower(AbstractDungeon.player, amount));
         applyToTarget(owner, owner, new StrengthPower(owner, amount2));
     }

@@ -10,7 +10,6 @@ import SNAct1.SNAct1Mod;
 import static SNAct1.SNAct1Mod.makeUIPath;
 
 public class MassAttackIntent extends CustomIntent {
-
     public static final String ID = SNAct1Mod.makeID("MassAttackIntent");
 
     private static final UIStrings uiStrings;

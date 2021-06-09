@@ -21,11 +21,11 @@
   },
   "SNAct1:BossLightBreath": {
     "NAME": "Light Breath",
-    "DESCRIPTION": "Deal !D! damage to ALL enemies. NL Gain !B Block and !M! Strength."
+    "DESCRIPTION": "Deal !D! damage to ALL enemies. NL Gain !B! Block and !M! Strength."
   },
   "SNAct1:BossNinisGrace": {
     "NAME": "Ninis' Grace",
-    "DESCRIPTION": "This creature increases the next !M! instance(s) of Block it gains by !SNAct1:SecondMagic!%."
+    "DESCRIPTION": "This creature increases the next !M! instance(s) of Block it would gain by !SNAct1:SecondMagic!%."
   },
   "SNAct1:BossRallyDefense": {
     "NAME": "Rally Defense",

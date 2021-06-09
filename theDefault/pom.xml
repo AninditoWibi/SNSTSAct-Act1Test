@@ -8,8 +8,8 @@
     <!--The author name(s) as they appear in MTS and any other comments are in your ModTheSpire.json-->
     <groupId>SNActMod</groupId>
     <artifactId>SNAct1Test</artifactId> <!--Keep a note of this one: this is the ID used in the "auto add cards" method-->
-    <name>SNAct1</name>
-    <version>0.0.1</version>
+    <name>SN Act 1 - Interdimensional Rifts WIP</name>
+    <version>0.1</version>
     <description>A test mod for SN's act 1.</description>
 
     <properties>

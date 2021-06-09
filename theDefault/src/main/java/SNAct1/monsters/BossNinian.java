@@ -27,7 +27,6 @@ import com.megacrit.cardcrawl.vfx.combat.BlizzardEffect;
 import com.megacrit.cardcrawl.vfx.combat.MindblastEffect;
 
 import com.megacrit.cardcrawl.vfx.combat.RoomTintEffect;
-import jdk.internal.instrumentation.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import static SNAct1.util.Wiz.*;
@@ -110,7 +109,7 @@ public class BossNinian extends AbstractCardMonster {
     }
 
     public BossNinian(final float x, final float y) {
-        super(BossNinian.NAME, ID, NINIAN_HP, -5.0F, 0, 555.0f, 415.0f, IMG, x, y);
+        super(BossNinian.NAME, ID, NINIAN_HP, -5.0F, 0, 506.0f, 468.0f, IMG, x, y);
         this.type = EnemyType.BOSS;
         this.dialogX = (this.hb_x - 70.0F) * Settings.scale;
         this.dialogY -= (this.hb_y - 55.0F) * Settings.scale;
@@ -297,6 +296,7 @@ public class BossNinian extends AbstractCardMonster {
     @Override
     protected void getMove(int i) {
         boolean highAsc = AbstractDungeon.ascensionLevel >= 19;
+        logger.info("are we fighting BN on high asc? the answer is " + highAsc + " and we're on asc level " + AbstractDungeon.ascensionLevel );
         /*
         * reminder:
         * light breath = 0, ice breath = 1
@@ -304,31 +304,44 @@ public class BossNinian extends AbstractCardMonster {
         * glacies (ultimate) = 4
         * also applies to move array names
         * */
-        if (moveCounter == 1 && highAsc) {
-            setMoveShortcut(MOVE_ESCAPEROUTE, MOVES[2], cardList.get(2).makeStatEquivalentCopy());
+        if (highAsc) {
+            if (moveCounter == 1) {
+                setMoveShortcut(MOVE_ESCAPEROUTE, MOVES[2], cardList.get(2).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 2) {
+                setMoveShortcut(MOVE_ULTIMATE, MOVES[4], cardList.get(4).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 3) {
+                setMoveShortcut(MOVE_BLOCKBUFF, MOVES[3], cardList.get(3).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 4) {
+                setMoveShortcut(MOVE_ICEBREATH, MOVES[1], cardList.get(1).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 5) {
+                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 6) {
+                setMoveShortcut(MOVE_ULTIMATE, MOVES[4], cardList.get(4).makeStatEquivalentCopy());
+            }
         } else {
-            setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
-        }
-        if (moveCounter == 2 && highAsc) {
-            setMoveShortcut(MOVE_ULTIMATE, MOVES[4], cardList.get(4).makeStatEquivalentCopy());
-        } else {
-            setMoveShortcut(MOVE_ICEBREATH, MOVES[1], cardList.get(1).makeStatEquivalentCopy());
-        }
-        if (moveCounter == 3) {
-            setMoveShortcut(MOVE_BLOCKBUFF, MOVES[3], cardList.get(3).makeStatEquivalentCopy());
-        }
-        if (moveCounter == 4 && highAsc) {
-            setMoveShortcut(MOVE_ICEBREATH, MOVES[1], cardList.get(1).makeStatEquivalentCopy());
-        } else {
-            setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
-        }
-        if (moveCounter == 5 && highAsc) {
-            setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
-        } else {
-            setMoveShortcut(MOVE_ESCAPEROUTE, MOVES[2], cardList.get(2).makeStatEquivalentCopy());
-        }
-        if (moveCounter == 6) {
-            setMoveShortcut(MOVE_ULTIMATE, MOVES[4], cardList.get(4).makeStatEquivalentCopy());
+            if (moveCounter == 1) {
+                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 2) {
+                setMoveShortcut(MOVE_ICEBREATH, MOVES[1], cardList.get(1).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 3) {
+                setMoveShortcut(MOVE_BLOCKBUFF, MOVES[3], cardList.get(3).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 4) {
+                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 5) {
+                setMoveShortcut(MOVE_ESCAPEROUTE, MOVES[2], cardList.get(2).makeStatEquivalentCopy());
+            }
+            if (moveCounter == 6) {
+                setMoveShortcut(MOVE_ULTIMATE, MOVES[4], cardList.get(4).makeStatEquivalentCopy());
+            }
         }
     }
 
