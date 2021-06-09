@@ -1,5 +1,6 @@
 package SNAct1.util;
 
+import SNAct1.powers.NextTurnPowerPower;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.*;
@@ -172,6 +173,18 @@ public class Wiz {
     }
     public static void applyToEnemy(AbstractMonster m, AbstractPower po) {
         atb(new ApplyPowerAction(m, AbstractDungeon.player, po, po.amount));
+    }
+
+    public static void applyToSelfNextTurn(AbstractPower po) {
+        atb(new ApplyPowerAction(AbstractDungeon.player, AbstractDungeon.player, new NextTurnPowerPower(AbstractDungeon.player, po)));
+    }
+
+    public static void applyToTargetNextTurn(AbstractCreature target, AbstractPower po) {
+        atb(new ApplyPowerAction(target, target, new NextTurnPowerPower(target, po)));
+    }
+
+    public static void applyToTargetNextTurnTop(AbstractCreature target, AbstractPower po) {
+        att(new ApplyPowerAction(target, target, new NextTurnPowerPower(target, po)));
     }
 
     public static void applyToEnemyTop(AbstractMonster m, AbstractPower po) {

@@ -1,7 +1,11 @@
 package SNAct1;
 
+import SNAct1.CustomIntent.MassAttackIntent;
+import SNAct1.cards.cardvars.SecondMagicNumber;
+import SNAct1.monsters.BossNinian;
+import SNAct1.relics.*;
+import actlikeit.RazIntent.CustomIntent;
 import basemod.*;
-import basemod.eventUtil.AddEventParams;
 import basemod.helpers.RelicType;
 import basemod.interfaces.*;
 import com.badlogic.gdx.Gdx;
@@ -10,28 +14,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.evacipated.cardcrawl.mod.stslib.Keyword;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
+import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.TheCity;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardHelper;
-import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.localization.*;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import SNAct1.cards.*;
-import SNAct1.characters.TheDefault;
-import SNAct1.events.IdentityCrisisEvent;
-import SNAct1.potions.PlaceholderPotion;
-import SNAct1.relics.BottledPlaceholderRelic;
-import SNAct1.relics.DefaultClickableRelic;
-import SNAct1.relics.PlaceholderRelic;
-import SNAct1.relics.PlaceholderRelic2;
 import SNAct1.util.IDCheckDontTouchPls;
 import SNAct1.util.TextureLoader;
-import SNAct1.variables.DefaultCustomVariable;
-import SNAct1.variables.DefaultSecondMagicNumber;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -73,7 +70,9 @@ public class SNAct1Mod implements
         EditRelicsSubscriber,
         EditStringsSubscriber,
         EditKeywordsSubscriber,
-        EditCharactersSubscriber,
+        AddAudioSubscriber,
+        PostBattleSubscriber,
+        PreMonsterTurnSubscriber,
         PostInitializeSubscriber {
     // Make sure to implement the subscribers *you* are using (read basemod wiki). Editing cards? EditCardsSubscriber.
     // Making relics? EditRelicsSubscriber. etc., etc., for a full list and how to make your own, visit the basemod wiki.
@@ -92,21 +91,17 @@ public class SNAct1Mod implements
 
     // =============== INPUT TEXTURE LOCATION =================
 
+    public static class Enums {
+        @SpireEnum(name = "SNBOSSCARDS") // These two HAVE to have the same absolutely identical name.
+        public static AbstractCard.CardColor EGO;
+        @SpireEnum(name = "SNBOSSCARDS")
+        @SuppressWarnings("unused")
+        public static CardLibrary.LibraryType LIBRARY_COLOR;
+    }
+
     // Colors (RGB)
     // Character Color
     public static final Color DEFAULT_GRAY = CardHelper.getColor(64.0f, 70.0f, 70.0f);
-
-    // Potion Colors in RGB
-    public static final Color PLACEHOLDER_POTION_LIQUID = CardHelper.getColor(209.0f, 53.0f, 18.0f); // Orange-ish Red
-    public static final Color PLACEHOLDER_POTION_HYBRID = CardHelper.getColor(255.0f, 230.0f, 230.0f); // Near White
-    public static final Color PLACEHOLDER_POTION_SPOTS = CardHelper.getColor(100.0f, 25.0f, 10.0f); // Super Dark Red/Brown
-
-    // ONCE YOU CHANGE YOUR MOD ID (BELOW, YOU CAN'T MISS IT) CHANGE THESE PATHS!!!!!!!!!!!
-    // ONCE YOU CHANGE YOUR MOD ID (BELOW, YOU CAN'T MISS IT) CHANGE THESE PATHS!!!!!!!!!!!
-    // ONCE YOU CHANGE YOUR MOD ID (BELOW, YOU CAN'T MISS IT) CHANGE THESE PATHS!!!!!!!!!!!
-    // ONCE YOU CHANGE YOUR MOD ID (BELOW, YOU CAN'T MISS IT) CHANGE THESE PATHS!!!!!!!!!!!
-    // ONCE YOU CHANGE YOUR MOD ID (BELOW, YOU CAN'T MISS IT) CHANGE THESE PATHS!!!!!!!!!!!
-    // ONCE YOU CHANGE YOUR MOD ID (BELOW, YOU CAN'T MISS IT) CHANGE THESE PATHS!!!!!!!!!!!
 
     // Card backgrounds - The actual rectangular card.
     private static final String ATTACK_DEFAULT_GRAY = "SNAct1Resources/images/512/bg_attack_default_gray.png";
@@ -138,30 +133,48 @@ public class SNAct1Mod implements
     // =============== MAKE IMAGE PATHS =================
 
     public static String makeCardPath(String resourcePath) {
-        return getModID() + "Resources/images/cards/" + resourcePath;
+        return getModID() + "SNAct1Resources/images/cards/" + resourcePath;
     }
 
     public static String makeRelicPath(String resourcePath) {
-        return getModID() + "Resources/images/relics/" + resourcePath;
+        return getModID() + "SNAct1Resources/images/relics/" + resourcePath;
     }
 
     public static String makeRelicOutlinePath(String resourcePath) {
-        return getModID() + "Resources/images/relics/outline/" + resourcePath;
+        return getModID() + "SNAct1Resources/images/relics/outline/" + resourcePath;
     }
 
     public static String makeOrbPath(String resourcePath) {
-        return getModID() + "Resources/images/orbs/" + resourcePath;
+        return getModID() + "SNAct1Resources/images/orbs/" + resourcePath;
     }
 
     public static String makePowerPath(String resourcePath) {
-        return getModID() + "Resources/images/powers/" + resourcePath;
+        return getModID() + "SNAct1Resources/images/powers/" + resourcePath;
     }
 
     public static String makeEventPath(String resourcePath) {
-        return getModID() + "Resources/images/events/" + resourcePath;
+        return getModID() + "SNAct1Resources/images/events/" + resourcePath;
     }
 
-    // =============== /MAKE IMAGE PATHS/ =================
+    public static String makeBossVoiceLinePath(String resourcePath) {
+        return modID + "SNAct1Resources/audio/bossvoice/" + resourcePath;
+    }
+
+    public static String makeMusicPath(String resourcePath) {
+        return modID + "SNAct1Resources/audio/music/" + resourcePath;
+    }
+
+    public static String makeMonsterPath(String resourcePath) {
+        return modID + "SNAct1Resources/images/monsters/" + resourcePath;
+    }
+
+    public static String makeUIPath(String resourcePath) {
+        return modID + "SNAct1Resources/images/ui/" + resourcePath;
+    }
+
+    public static String makeImagePath(String resourcePath) {
+        return modID + "SNAct1Resources/images/" + resourcePath;
+    }
 
     // =============== /INPUT TEXTURE LOCATION/ =================
 
@@ -170,29 +183,9 @@ public class SNAct1Mod implements
 
     public SNAct1Mod() {
         logger.info("Subscribe to BaseMod hooks");
-
         BaseMod.subscribe(this);
-        
-      /*
-           (   ( /(  (     ( /( (            (  `   ( /( )\ )    )\ ))\ )
-           )\  )\()) )\    )\()))\ )   (     )\))(  )\()|()/(   (()/(()/(
-         (((_)((_)((((_)( ((_)\(()/(   )\   ((_)()\((_)\ /(_))   /(_))(_))
-         )\___ _((_)\ _ )\ _((_)/(_))_((_)  (_()((_) ((_|_))_  _(_))(_))_
-        ((/ __| || (_)_\(_) \| |/ __| __| |  \/  |/ _ \|   \  |_ _||   (_)
-         | (__| __ |/ _ \ | .` | (_ | _|  | |\/| | (_) | |) |  | | | |) |
-          \___|_||_/_/ \_\|_|\_|\___|___| |_|  |_|\___/|___/  |___||___(_)
-      */
-
         setModID("SNAct1");
-        // cool
-        // TODO: NOW READ THIS!!!!!!!!!!!!!!!:
 
-        // 1. Go to your resources folder in the project panel, and refactor> rename theDefaultResources to
-        // yourModIDResources.
-
-        // 2. Click on the localization > eng folder and press ctrl+shift+r, then select "Directory" (rather than in Project) and press alt+c (or mark the match case option)
-        // replace all instances of theDefault with yourModID, and all instances of thedefault with yourmodid (the same but all lowercase).
-        // Because your mod ID isn't the default. Your cards (and everything else) should have Your mod id. Not mine.
         // It's important that the mod ID prefix for keywords used in the cards descriptions is lowercase!
 
         // 3. Scroll down (or search for "ADD CARDS") till you reach the ADD CARDS section, and follow the TODO instructions
@@ -202,15 +195,6 @@ public class SNAct1Mod implements
 
         logger.info("Done subscribing");
 
-        logger.info("Creating the color " + TheDefault.Enums.COLOR_GRAY.toString());
-
-        BaseMod.addColor(TheDefault.Enums.COLOR_GRAY, DEFAULT_GRAY, DEFAULT_GRAY, DEFAULT_GRAY,
-                DEFAULT_GRAY, DEFAULT_GRAY, DEFAULT_GRAY, DEFAULT_GRAY,
-                ATTACK_DEFAULT_GRAY, SKILL_DEFAULT_GRAY, POWER_DEFAULT_GRAY, ENERGY_ORB_DEFAULT_GRAY,
-                ATTACK_DEFAULT_GRAY_PORTRAIT, SKILL_DEFAULT_GRAY_PORTRAIT, POWER_DEFAULT_GRAY_PORTRAIT,
-                ENERGY_ORB_DEFAULT_GRAY_PORTRAIT, CARD_ENERGY_ORB);
-
-        logger.info("Done creating the color");
 
 
         logger.info("Adding mod settings");
@@ -274,9 +258,7 @@ public class SNAct1Mod implements
 
 
     public static void initialize() {
-        logger.info("========================= Initializing Default Mod. Hi. =========================");
         SNAct1Mod snmod = new SNAct1Mod();
-        logger.info("========================= /Default Mod Initialized. Hello World./ =========================");
     }
 
     // ============== /SUBSCRIBE, CREATE THE COLOR_GRAY, INITIALIZE/ =================
@@ -293,100 +275,39 @@ public class SNAct1Mod implements
         // Create the Mod Menu
         ModPanel settingsPanel = new ModPanel();
 
-        // Create the on/off button:
-        ModLabeledToggleButton enableNormalsButton = new ModLabeledToggleButton("This is the text which goes next to the checkbox.",
-                350.0f, 700.0f, Settings.CREAM_COLOR, FontHelper.charDescFont, // Position (trial and error it), color, font
-                enablePlaceholder, // Boolean it uses
-                settingsPanel, // The mod panel in which this button will be in
-                (label) -> {}, // thing??????? idk
-                (button) -> { // The actual button:
-
-                    enablePlaceholder = button.enabled; // The boolean true/false will be whether the button is enabled or not
-                    try {
-                        // And based on that boolean, set the settings and save them
-                        SpireConfig config = new SpireConfig("defaultMod", "theDefaultConfig", theDefaultDefaultSettings);
-                        config.setBool(ENABLE_PLACEHOLDER_SETTINGS, enablePlaceholder);
-                        config.save();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-
-        settingsPanel.addUIElement(enableNormalsButton); // Add the button to the settings panel. Button is a go.
-
         BaseMod.registerModBadge(badgeTexture, MODNAME, AUTHOR, DESCRIPTION, settingsPanel);
 
+        //custom Intent for terra, kefka, ninian
+        CustomIntent.add(new MassAttackIntent());
 
-        // =============== EVENTS =================
-        // https://github.com/daviscook477/BaseMod/wiki/Custom-Events
+        BaseMod.addMonster(BossNinian.ID, (BaseMod.GetMonster) BossNinian::new);
 
-        // You can add the event like so:
-        // BaseMod.addEvent(IdentityCrisisEvent.ID, IdentityCrisisEvent.class, TheCity.ID);
-        // Then, this event will be exclusive to the City (act 2), and will show up for all characters.
-        // If you want an event that's present at any part of the game, simply don't include the dungeon ID
 
-        // If you want to have more specific event spawning (e.g. character-specific or so)
-        // deffo take a look at that basemod wiki link as well, as it explains things very in-depth
-        // btw if you don't provide event type, normal is assumed by default
 
-        // Create a new event builder
-        // Since this is a builder these method calls (outside of create()) can be skipped/added as necessary
-        AddEventParams eventParams = new AddEventParams.Builder(IdentityCrisisEvent.ID, IdentityCrisisEvent.class) // for this specific event
-                .dungeonID(TheCity.ID) // The dungeon (act) this event will appear in
-                .playerClass(TheDefault.Enums.THE_DEFAULT) // Character specific event
-                .create();
 
-        // Add the event
-        BaseMod.addEvent(eventParams);
-
-        // =============== /EVENTS/ =================
         logger.info("Done loading badge Image and mod options");
     }
 
     // =============== / POST-INITIALIZE/ =================
-
-    // ================ ADD POTIONS ===================
-
-    public void receiveEditPotions() {
-        logger.info("Beginning to edit potions");
-
-        // Class Specific Potion. If you want your potion to not be class-specific,
-        // just remove the player class at the end (in this case the "TheDefaultEnum.THE_DEFAULT".
-        // Remember, you can press ctrl+P inside parentheses like addPotions)
-        BaseMod.addPotion(PlaceholderPotion.class, PLACEHOLDER_POTION_LIQUID, PLACEHOLDER_POTION_HYBRID, PLACEHOLDER_POTION_SPOTS, PlaceholderPotion.POTION_ID, TheDefault.Enums.THE_DEFAULT);
-
-        logger.info("Done editing potions");
-    }
-
-    // ================ /ADD POTIONS/ ===================
 
 
     // ================ ADD RELICS ===================
 
     @Override
     public void receiveEditRelics() {
-        logger.info("Adding relics");
 
-        // Take a look at https://github.com/daviscook477/BaseMod/wiki/AutoAdd
-        // as well as
-        // https://github.com/kiooeht/Bard/blob/e023c4089cc347c60331c78c6415f489d19b6eb9/src/main/java/com/evacipated/cardcrawl/mod/bard/BardMod.java#L319
-        // for reference as to how to turn this into an "Auto-Add" rather than having to list every relic individually.
-        // Of note is that the bard mod uses it's own custom relic class (not dissimilar to our AbstractDefaultCard class for cards) that adds the 'color' field,
-        // in order to automatically differentiate which pool to add the relic too.
+        BaseMod.addRelic(new CervantesAcheronAndNirvana(), RelicType.SHARED);
+        UnlockTracker.markRelicAsSeen(CervantesAcheronAndNirvana.ID);
+        BaseMod.addRelic(new NinianIceDragonstone(), RelicType.SHARED);
+        UnlockTracker.markRelicAsSeen(NinianIceDragonstone.ID);
+        BaseMod.addRelic(new TerraEsperkinsMagicite(), RelicType.SHARED);
+        UnlockTracker.markRelicAsSeen(TerraEsperkinsMagicite.ID);
+        // charspecific relics
+        BaseMod.addRelic(new IroncladSacredFlame(), RelicType.RED);
+        UnlockTracker.markRelicAsSeen(IroncladSacredFlame.ID);
+        BaseMod.addRelic(new WatcherHymnal(), RelicType.PURPLE);
+        UnlockTracker.markRelicAsSeen(WatcherHymnal.ID);
 
-        // This adds a character specific relic. Only when you play with the mentioned color, will you get this relic.
-        BaseMod.addRelicToCustomPool(new PlaceholderRelic(), TheDefault.Enums.COLOR_GRAY);
-        BaseMod.addRelicToCustomPool(new BottledPlaceholderRelic(), TheDefault.Enums.COLOR_GRAY);
-        BaseMod.addRelicToCustomPool(new DefaultClickableRelic(), TheDefault.Enums.COLOR_GRAY);
-
-        // This adds a relic to the Shared pool. Every character can find this relic.
-        BaseMod.addRelic(new PlaceholderRelic2(), RelicType.SHARED);
-
-        // Mark relics as seen - makes it visible in the compendium immediately
-        // If you don't have this it won't be visible in the compendium until you see them in game
-        // (the others are all starters so they're marked as seen in the character file)
-        UnlockTracker.markRelicAsSeen(BottledPlaceholderRelic.ID);
-        logger.info("Done adding relics!");
     }
 
     // ================ /ADD RELICS/ ===================
@@ -402,8 +323,7 @@ public class SNAct1Mod implements
         // Add the Custom Dynamic Variables
         logger.info("Add variables");
         // Add the Custom Dynamic variables
-        BaseMod.addDynamicVariable(new DefaultCustomVariable());
-        BaseMod.addDynamicVariable(new DefaultSecondMagicNumber());
+        BaseMod.addDynamicVariable(new SecondMagicNumber());
 
         logger.info("Adding cards");
         // Add the cards
@@ -420,7 +340,7 @@ public class SNAct1Mod implements
         //TODO: Rename the "DefaultMod" with the modid in your ModTheSpire.json file
         //TODO: The artifact mentioned in ModTheSpire.json is the artifactId in pom.xml you should've edited earlier
         new AutoAdd("SNAct1") // ${project.artifactId}
-                .packageFilter(AbstractDefaultCard.class) // filters to any class in the same package as AbstractDefaultCard, nested packages included
+                .packageFilter(AbstractSNActCard.class) // filters to any class in the same package as AbstractDefaultCard, nested packages included
                 .setDefaultSeen(true)
                 .cards();
 
@@ -438,20 +358,19 @@ public class SNAct1Mod implements
 
     @Override
     public void receiveEditStrings() {
-        logger.info("You seeing this?");
         logger.info("Beginning to edit strings for mod with ID: " + getModID());
 
         // CardStrings
         BaseMod.loadCustomStringsFile(CardStrings.class,
-                getModID() + "Resources/localization/eng/DefaultMod-Card-Strings.json");
+                getModID() + "Resources/localization/eng/Card-Strings.json");
 
         // PowerStrings
         BaseMod.loadCustomStringsFile(PowerStrings.class,
-                getModID() + "Resources/localization/eng/DefaultMod-Power-Strings.json");
+                getModID() + "Resources/localization/eng/Power-Strings.json");
 
         // RelicStrings
         BaseMod.loadCustomStringsFile(RelicStrings.class,
-                getModID() + "Resources/localization/eng/DefaultMod-Relic-Strings.json");
+                getModID() + "Resources/localization/eng/Relic-Strings.json");
 
         // Event Strings
         BaseMod.loadCustomStringsFile(EventStrings.class,
@@ -459,17 +378,9 @@ public class SNAct1Mod implements
 
         // PotionStrings
         BaseMod.loadCustomStringsFile(PotionStrings.class,
-                getModID() + "Resources/localization/eng/DefaultMod-Potion-Strings.json");
+                getModID() + "Resources/localization/eng/Potion-Strings.json");
 
-        // CharacterStrings
-        BaseMod.loadCustomStringsFile(CharacterStrings.class,
-                getModID() + "Resources/localization/eng/DefaultMod-Character-Strings.json");
 
-        // OrbStrings
-        BaseMod.loadCustomStringsFile(OrbStrings.class,
-                getModID() + "Resources/localization/eng/DefaultMod-Orb-Strings.json");
-
-        logger.info("Done edittting strings");
     }
 
     // ================ /LOAD THE TEXT/ ===================
@@ -487,7 +398,7 @@ public class SNAct1Mod implements
         // In Keyword-Strings.json you would have PROPER_NAME as A Long Keyword and the first element in NAMES be a long keyword, and the second element be a_long_keyword
 
         Gson gson = new Gson();
-        String json = Gdx.files.internal(getModID() + "Resources/localization/eng/DefaultMod-Keyword-Strings.json").readString(String.valueOf(StandardCharsets.UTF_8));
+        String json = Gdx.files.internal(getModID() + "Resources/localization/eng/Keyword-Strings.json").readString(String.valueOf(StandardCharsets.UTF_8));
         com.evacipated.cardcrawl.mod.stslib.Keyword[] keywords = gson.fromJson(json, com.evacipated.cardcrawl.mod.stslib.Keyword[].class);
 
         if (keywords != null) {
@@ -504,5 +415,63 @@ public class SNAct1Mod implements
     // in order to avoid conflicts if any other mod uses the same ID.
     public static String makeID(String idText) {
         return getModID() + ":" + idText;
+    }
+
+    @Override
+    public void receiveAddAudio() {
+
+        // voice - cervantes
+        BaseMod.addAudio(makeID("CervantesOpening"), makeBossVoiceLinePath("cervantes-opening.wav"));
+        BaseMod.addAudio(makeID("CervantesDC"), makeBossVoiceLinePath("cervantes-dreadcharge.wav"));
+        BaseMod.addAudio(makeID("CervantesDCB"), makeBossVoiceLinePath("cervantes-geodaray.wav"));
+        BaseMod.addAudio(makeID("Cervantes4A+B"), makeBossVoiceLinePath("cervantes-culverin.wav"));
+        BaseMod.addAudio(makeID("CervantesIGDR"), makeBossVoiceLinePath("cervantes-igdr.wav"));
+        BaseMod.addAudio(makeID("CervantesDSB"), makeBossVoiceLinePath("cervantes-sixties.wav"));
+        BaseMod.addAudio(makeID("CervantesSC"), makeBossVoiceLinePath("cervantes-soulcharge.wav"));
+        BaseMod.addAudio(makeID("Cervantes44A+G"), makeBossVoiceLinePath("cervantes-phantasm.wav"));
+        BaseMod.addAudio(makeID("CervantesCE"), makeBossVoiceLinePath("cervantes-ultimate.wav"));
+        BaseMod.addAudio(makeID("CervantesDeath"), makeBossVoiceLinePath("cervantes-death.wav"));
+        // voice - eliwood
+        BaseMod.addAudio(makeID("EliwoodOpening"), makeBossVoiceLinePath("eliwood-opening.wav"));
+        BaseMod.addAudio(makeID("EliwoodAttacking"), makeBossVoiceLinePath("eliwood-deathblow.wav"));
+        BaseMod.addAudio(makeID("EliwoodDefending"), makeBossVoiceLinePath("eliwood-massblock.wav"));
+        BaseMod.addAudio(makeID("EliwoodDebuff"), makeBossVoiceLinePath("eliwood-chillattack.wav"));
+        BaseMod.addAudio(makeID("EliwoodBuff"), makeBossVoiceLinePath("eliwood-visions.wav"));
+        BaseMod.addAudio(makeID("EliwoodPlayerDies"), makeBossVoiceLinePath("eliwood-playerdeath.wav"));
+        BaseMod.addAudio(makeID("EliwoodDeath"), makeBossVoiceLinePath("eliwood-death.wav"));
+        // voice - kefka
+        BaseMod.addAudio(makeID("KefkaOpening"), makeBossVoiceLinePath("kefka-opening.wav"));
+        BaseMod.addAudio(makeID("KefkaFire"), makeBossVoiceLinePath("kefka-fragrantfire.wav"));
+        BaseMod.addAudio(makeID("KefkaThundaga"), makeBossVoiceLinePath("kefka-zaptrap.wav"));
+        BaseMod.addAudio(makeID("KefkaLaughing"), makeBossVoiceLinePath("kefka-laughter.wav"));
+        BaseMod.addAudio(makeID("KefkaHyperdrive"), makeBossVoiceLinePath("kefka-hyperdrive.wav"));
+        BaseMod.addAudio(makeID("KefkaHavocWing"), makeBossVoiceLinePath("kefka-havocwing.wav"));
+        BaseMod.addAudio(makeID("KefkaDeath"), makeBossVoiceLinePath("kefka-death.wav"));
+        BaseMod.addAudio(makeID("KefkaFlee"), makeBossVoiceLinePath("kefka-flee.wav"));
+        // voice - ninian
+        BaseMod.addAudio(makeID("NinianOpening"), makeBossVoiceLinePath("ninian-opening.wav"));
+        BaseMod.addAudio(makeID("NinianAttacking"), makeBossVoiceLinePath("ninian-attack-edited.wav"));
+        BaseMod.addAudio(makeID("NinianDefending"), makeBossVoiceLinePath("ninian-defense-edited.wav"));
+        BaseMod.addAudio(makeID("NinianUltimate"), makeBossVoiceLinePath("ninian-ultimate-edited.wav"));
+        BaseMod.addAudio(makeID("NinianDeath"), makeBossVoiceLinePath("ninian-death.wav"));
+        // voice - terra
+        BaseMod.addAudio(makeID("TerraOpening"), makeBossVoiceLinePath("terra-opening.wav"));
+        BaseMod.addAudio(makeID("TerraFiraga"), makeBossVoiceLinePath("terra-firaga.wav"));
+        BaseMod.addAudio(makeID("TerraBlizzard"), makeBossVoiceLinePath("terra-blizzard.wav"));
+        BaseMod.addAudio(makeID("TerraRasp"), makeBossVoiceLinePath("terra-rasp.wav"));
+        BaseMod.addAudio(makeID("TerraTornado"), makeBossVoiceLinePath("terra-tornado.wav"));
+        BaseMod.addAudio(makeID("TerraFlood"), makeBossVoiceLinePath("terra-flood.wav"));
+        BaseMod.addAudio(makeID("TerraDeath"), makeBossVoiceLinePath("terra-death.wav"));
+        BaseMod.addAudio(makeID("TerraFlee"), makeBossVoiceLinePath("terra-flee.wav"));
+    }
+
+    @Override
+    public void receivePostBattle(AbstractRoom abstractRoom) {
+
+    }
+
+    @Override
+    public boolean receivePreMonsterTurn(AbstractMonster abstractMonster) {
+        return false;
     }
 }

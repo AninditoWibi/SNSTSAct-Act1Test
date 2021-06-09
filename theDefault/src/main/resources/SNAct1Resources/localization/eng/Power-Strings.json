@@ -1,0 +1,63 @@
+{
+        "SNAct1:ArcadianVisionPower": {
+                "NAME": "Arcadian Vision",
+                "DESCRIPTIONS": [
+                        "For #b",
+                        " turn, attack damage dealt and Block gained by this creature are increased by #b",
+                        " turns, attack damage dealt and Block gained by this creature are increased by #b",
+                        "."
+                ]
+        },
+        "SNAct1:ArdentAspectPower": {
+                "NAME": "Ardent Aspect",
+                "DESCRIPTIONS": ["At the start of your turn, YOU gain #b", " #yStrength and this creature gains #b", " #yStrength."]
+        },
+        "SNAct1:BlazingAspectPower": {
+                "NAME": "Blazing Aspect",
+                "DESCRIPTIONS": ["Whenever this creature attacks, if it has more #yStrength than the target, it gains temporary #yStrength next turn equal to the difference."]
+        },
+        "SNAct1:ChillDefensePower": {
+                "NAME": "Chill Defense",
+                "DESCRIPTIONS": [
+                        "For #b",
+                        " turn, whenever this creature gains Block, it gains #b",
+                        " turns, whenever this creature gains Block, it gains #b",
+                        " less."
+                ]
+        },
+        "SNAct1:EnfeebledBodyPower": {
+                "NAME": "Enfeebled Body",
+                "DESCRIPTIONS": ["Whenever this creature loses all Block, it gains #b", " #yWeak."]
+        },
+        "SNAct1:NinisGracePower": {
+                "NAME": "Ninis' Grace",
+                "DESCRIPTIONS": [
+                        "The next time this creature gains Block, it gains #b",
+                        "The next #b",
+                        "% more Block.",
+                        " times this creature gains Block, it gains #b"
+                ]
+        },
+        "SNAct1:SomberPower": {
+                "NAME": "Somber",
+                "DESCRIPTIONS": [
+                        "If you play #b",
+                        " more card this turn, this creature gains #b",
+                        " #yVulnerable.",
+                        " more cards this turn, this creature gains #b"
+                ]
+        },
+        "SNAct1:SoulChargePower": {
+                "NAME": "Soul Charge",
+                "DESCRIPTIONS": [
+                        "For #b",
+                        " turn, whenever this creature deals direct attack damage, it deals #b",
+                        " turn, whenever this creature deals direct attack damage, it deals #b",
+                        "% more damage."
+                ]
+        },
+        "SNAct1:WielderOfDurandalPower": {
+                "NAME": "Wielder of Durandal",
+                "DESCRIPTIONS": ["This creature is your #gally. Deals #b", "% more damage against #rWayward #rIce #rDragon."]
+        }
+}

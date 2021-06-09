@@ -1,0 +1,38 @@
+{
+  "SNAct1:BossChillAttack": {
+    "NAME": "Chill Attack",
+    "DESCRIPTION": "Enemy loses !M! Strength."
+  },
+  "SNAct1:BossDeathBlow": {
+    "NAME": "Death Blow",
+    "DESCRIPTION": "Deal !D! damage. NL Gain !M! Strength."
+  },
+  "SNAct1:BossEscapeRoute": {
+    "NAME": "Escape Route",
+    "DESCRIPTION": "Gain !B! Block."
+  },
+  "SNAct1:BossGlacies": {
+    "NAME": "Glacies",
+    "DESCRIPTION": "Deal !D! damage. NL Deals additional damage equal to the amount of Block on this creature."
+  },
+  "SNAct1:BossIceBreath": {
+    "NAME": "Ice Breath",
+    "DESCRIPTION": "Deal !D! damage to ALL enemies. NL Apply !M! *Chill *Defense for !SNAct1:SecondMagic! turns to ALL enemies."
+  },
+  "SNAct1:BossLightBreath": {
+    "NAME": "Light Breath",
+    "DESCRIPTION": "Deal !D! damage to ALL enemies. NL Gain !B Block and !M! Strength."
+  },
+  "SNAct1:BossNinisGrace": {
+    "NAME": "Ninis' Grace",
+    "DESCRIPTION": "This creature increases the next !M! instance(s) of Block it gains by !SNAct1:SecondMagic!%."
+  },
+  "SNAct1:BossRallyDefense": {
+    "NAME": "Rally Defense",
+    "DESCRIPTION": "This creature and all allies gain !B! Block."
+  },
+  "SNAct1:BossVisionsOfArcadia": {
+    "NAME": "Visions of Arcadia",
+    "DESCRIPTION": "Apply !M! *Arcadian *Vision for !SNAct1:SecondMagic! turns to this creature and all allies."
+  }
+}

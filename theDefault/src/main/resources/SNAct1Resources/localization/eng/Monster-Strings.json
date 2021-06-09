@@ -1,0 +1,102 @@
+{
+  "SNAct1:BossCervantes": {
+    "MOVES": [
+      "Dread Charge",
+      "Geo Da Ray",
+      "Genocidal Culverin",
+      "Geo Da Ray Rafaga",
+      "Shrieking Sixties",
+      "Soul Edge's Call",
+      "Phantasm Fleet",
+      "Casa de Leviathan"
+    ],
+    "NAME": "Dread Pirate Captain",
+    "DIALOG": [
+      "So, you dare to defy me?!",
+      "Get ready!",
+      "Sink into darkness!",
+      "Entertain me!",
+      "You'll pay!",
+      "I'll stab you out!",
+      "Death...IS YOURS!",
+      "I'll crush you...",
+      "Want to see hell?",
+      "*death scream*"
+    ]
+  },
+  "SNAct1:BossEliwood": {
+    "MOVES": [
+      "Death Blow",
+      "Rally Defense",
+      "Chill Attack",
+      "Visions of Arcadia"
+    ],
+    "NAME": "Knight of Lycia",
+    "DIALOG": [
+      "I will protect everyone!",
+      "Off with you, fiend!",
+      "Careful now.",
+      "Here's a present from me!",
+      "Durandal!",
+      "I...misjudged...",
+      "Forgive me..."
+    ]
+  },
+  "SNAct1:BossKefka": {
+    "MOVES": [
+      "Fragrant Fire",
+      "Zap-Trap Thundaga",
+      "Mocking Laughter",
+      "Hyperdrive",
+      "Havoc Wing"
+    ],
+    "NAME": "Puppetteered Esperkin",
+    "DIALOG": [
+      "Ooh, a new plaything?",
+      "You'll be well done!",
+      "Dance...DANCE!",
+      "Hee hee...HAH HAH HAH HAH!",
+      "Special delivery!",
+      "This is gonna hurt!",
+      "Inconceivable..",
+      "Gaaagh! I'll remember this!"
+    ]
+  },
+  "SNAct1:BossNinian": {
+    "MOVES": [
+      "Light Breath",
+      "Ice Breath",
+      "Escape Route",
+      "Ninis' Grace",
+      "Glacies"
+    ],
+    "NAME": "Wayward Ice Dragon",
+    "DIALOG": [
+      "*mournful roar*",
+      "No more...",
+      "May this make a difference!",
+      "Behold my power!",
+      "Ah..."
+    ]
+  },
+  "SNAct1:BossTerra": {
+    "MOVES": [
+      "Firaga",
+      "Blizzard",
+      "Rasp",
+      "Tornado",
+      "Flood"
+    ],
+    "NAME": "Puppetteered Esperkin",
+    "DIALOG": [
+      "Destroy...must- DESTROY!",
+      "Here!",
+      "Get away!",
+      "If I have to fight...",
+      "Sorrowful waters!",
+      "Malevolent winds...",
+      "*death scream*",
+      "*pained whimpering*"
+    ]
+  }
+}

@@ -10,12 +10,13 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 
 public class InvisNinianWeaknessPower extends AbstractPower implements InvisiblePower {
-    public static final String POWER_ID = SNAct1Mod.makeID("NinisGracePower");
+    public static final String POWER_ID = SNAct1Mod.makeID(InvisNinianWeaknessPower.class.getSimpleName());
     private static final PowerStrings powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
     public static final String NAME = powerStrings.NAME;
     public static final String[] DESCRIPTIONS = powerStrings.DESCRIPTIONS;
 
     int extraDamageValue; // 50 = 50% more damage, 100 = 100% more damage, etc
+    // doesn't need image cuz it's supposed to be invisible
 
     public InvisNinianWeaknessPower(AbstractCreature owner, int extraDamageValue) {
         this.name = NAME;

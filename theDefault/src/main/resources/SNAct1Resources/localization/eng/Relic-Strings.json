@@ -1,0 +1,45 @@
+{
+  "SNAct1:CervantesAcheronAndNirvana": {
+    "NAME": "Acheron and Nirvana",
+    "FLAVOR": "A pair of swords bearing fell power that once belonged to a vicious, power-hungry pirate captain.",
+    "DESCRIPTIONS": [
+      "Starts with #b",
+      " charges (max. #b",
+      " charges). Gain #b",
+      " charges whenever you complete a normal combat, #b",
+      " charges whenever you defeat an elite, and #b",
+      " charges whenever you defeat a boss. Once per combat, right click to activate: Spend #b",
+      " charges to gain #b",
+      " #yStrength and #b",
+      " #ySoul #yCharge."
+    ]
+  },
+  "SNAct1:IroncladSacredFlame": {
+    "NAME": "Sacred Flame",
+    "FLAVOR": "A wisp of blessed fire that never burns out.",
+    "DESCRIPTIONS": [
+      "The first #b", " times you exhaust a Status card each combat, heal #b", " HP."
+    ]
+  },
+  "SNAct1:NinianIceDragonstone": {
+    "NAME": "Ice Dragonstone",
+    "FLAVOR": "A mystical stone that's unbearably cold to the touch. It belonged to a half-dragon dancer who lost her life in a tragedy.",
+    "DESCRIPTIONS": [
+      "Gain [E] at the start of your turn. At the start of each combat, shuffle a #rFrostbitten into your draw pile."
+    ]
+  },
+  "SNAct1:TerraEsperkinsMagicite": {
+    "NAME": "Esperkin's Magicite",
+    "FLAVOR": "The crystallized, leftover remains of an esper. This shard was infused with the power of an esperkin girl.",
+    "DESCRIPTIONS": [
+      "The first time you exhaust a card each turn, gain [E] ."
+    ]
+  },
+  "SNAct1:WatcherHymnal": {
+    "NAME": "Hymnal",
+    "FLAVOR": "It is written: 'Phos hilaron hagias doxes, athanatou Patros...'",
+    "DESCRIPTIONS": [
+      "Whenever you create #b", " cards in a single combat, gain #b", " #yStrength."
+    ]
+  }
+}
