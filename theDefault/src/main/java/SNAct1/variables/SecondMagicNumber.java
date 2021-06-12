@@ -1,4 +1,4 @@
-package SNAct1.cards.cardvars;
+package SNAct1.variables;
 
 import basemod.abstracts.DynamicVariable;
 import com.megacrit.cardcrawl.cards.AbstractCard;

@@ -5,12 +5,13 @@ import SNAct1.SNAct1Mod;
 import SNAct1.actions.DamageAllOtherCharactersAction;
 import SNAct1.cards.enemyBossCards.*;
 import SNAct1.powers.*;
-import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.animations.TalkAction;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
-import com.megacrit.cardcrawl.actions.common.*;
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.GainBlockAction;
+import com.megacrit.cardcrawl.actions.common.RollMoveAction;
 import com.megacrit.cardcrawl.actions.utility.SFXAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -24,14 +25,14 @@ import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.combat.BlizzardEffect;
 import com.megacrit.cardcrawl.vfx.combat.MindblastEffect;
-
 import com.megacrit.cardcrawl.vfx.combat.RoomTintEffect;
 import org.apache.logging.log4j.LogManager;
 
 import static SNAct1.util.Wiz.*;
+import static SNAct1.util.Wiz.atb;
 
-public class BossNinian extends AbstractCardMonster {
-    public static final String ID = SNAct1Mod.makeID("BossNinian");
+public class BossNinianSimple extends AbstractSNActsMonster {
+    public static final String ID = SNAct1Mod.makeID("BossNinianSimple");
     private static final MonsterStrings monsterStrings = CardCrawlGame.languagePack.getMonsterStrings(ID);
     public static final String NAME = monsterStrings.NAME;
     public static final String[] MOVES = monsterStrings.MOVES;
@@ -44,46 +45,45 @@ public class BossNinian extends AbstractCardMonster {
     private static final byte MOVE_BLOCKBUFF = 3;
     private static final byte MOVE_ULTIMATE = 4;
 
-    private static final int LIGHTBREATH_DMG = 20;
-    private static final int LIGHTBREATH_DMG_HIGHASC = 24;
-    private static final int LIGHTBREATH_BLOCK = 18;
-    private static final int LIGHTBREATH_BLOCK_HIGHASC = 22;
+    private static final int LIGHTBREATH_DMG = 18;
+    private static final int LIGHTBREATH_DMG_HIGHASC = 22;
+    private static final int LIGHTBREATH_BLOCK = 16;
+    private static final int LIGHTBREATH_BLOCK_HIGHASC = 20;
     private static final int LIGHTBREATH_STRENGTHBUFF = 6;
-    private static final int LIGHTBREATH_STRENGTHBUFF_HIGHASC = 7;
     public int lightBreathDmg;
     public int lightBreathBlock;
     public int lightBreathStr;
 
-    private static final int ICEBREATH_DMG = 25;
-    private static final int ICEBREATH_DMG_HIGHASC = 30;
-    private static final int ICEBREATH_DEBUFF = 2;
-    private static final int ICEBREATH_DEBUFF_HIGHASC = 3;
+    private static final int ICEBREATH_DMG = 21;
+    private static final int ICEBREATH_DMG_HIGHASC = 25;
+    private static final int ICEBREATH_DEBUFF = -2;
+    private static final int ICEBREATH_DEBUFF_HIGHASC = -3;
     private static final int ICEBREATH_DEBUFF_DURATION = 1;
-    private static final int ICEBREATH_DEBUFF_DURATION_HIGHASC = 2;
+    private static final int ICEBREATH_DEBUFF_DURATION_HIGHASC = 1;
     public int iceBreathDmg;
     public int iceBreathDebuff;
     public int iceBreathDebuffDuration;
 
-    private static final int ESCAPEROUTE_BLOCK = 40;
-    private static final int ESCAPEROUTE_BLOCK_HIGHASC = 49;
+    private static final int ESCAPEROUTE_BLOCK = 36;
+    private static final int ESCAPEROUTE_BLOCK_HIGHASC = 46;
     public int escapeRouteBlock;
 
     private static final int BLOCKBUFF_DURATION = 1;
-    private static final int BLOCKBUFF_DURATION_HIGHASC = 2;
+    private static final int BLOCKBUFF_DURATION_HIGHASC = 1;
     private static final int BLOCKBUFF_VALUE = 50;
-    private static final int BLOCKBUFF_VALUE_HIGHASC = 45;
+    private static final int BLOCKBUFF_VALUE_HIGHASC = 50;
     public int blockBuffDuration;
     public int blockBuffValue;
 
-    private static final int ULTIMATE_BASEDMG = 35;
-    private static final int ULTIMATE_BASEDMG_HIGHASC = 40;
+    private static final int ULTIMATE_BASEDMG = 34;
+    private static final int ULTIMATE_BASEDMG_HIGHASC = 39;
     public int ultimateBaseDmg;
 
-    private static final int DESPAIR_BASESTRPENALTY = -6;
-    private static final int DESPAIR_BASESTRPENALTY_HIGHASC = -4;
+    private static final int DESPAIR_BASESTRPENALTY = -7;
+    private static final int DESPAIR_BASESTRPENALTY_HIGHASC = -5;
     private static final int DESPAIR_VULNERABLE_CARDS = 3;
     private static final int DESPAIR_VULNERABLE_CARDS_HIGHASC = 4;
-    private static final int DESPAIR_VULNERABLE_VALUE = 2;
+    private static final int DESPAIR_VULNERABLE_VALUE = 1;
     private static final int DESPAIR_VULNERABLE_VALUE_HIGHASC = 1;
     private static final int DESPAIR_WEAKONHIT = 2;
     private static final int DESPAIR_WEAKONHIT_HIGHASC = 1;
@@ -102,14 +102,12 @@ public class BossNinian extends AbstractCardMonster {
     private boolean voicelinePlayedUltimate;
     public static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(SNAct1Mod.class.getName());
 
-    public BossEliwood eliwood;
-
-    public BossNinian() {
+    public BossNinianSimple() {
         this(0.0f, 0.0f);
     }
 
-    public BossNinian(final float x, final float y) {
-        super(BossNinian.NAME, ID, NINIAN_HP, -5.0F, 0, 506.0f, 468.0f, IMG, x, y);
+    public BossNinianSimple(final float x, final float y) {
+        super(BossNinianSimple.NAME, ID, NINIAN_HP, -5.0F, 0, 506.0f, 468.0f, IMG, x, y);
         this.type = EnemyType.BOSS;
         this.dialogX = (this.hb_x - 70.0F) * Settings.scale;
         this.dialogY -= (this.hb_y - 55.0F) * Settings.scale;
@@ -120,6 +118,8 @@ public class BossNinian extends AbstractCardMonster {
         asc 9 = more boss HP/defense
         asc 19 = general boss improvement
          */
+
+        this.lightBreathStr = LIGHTBREATH_STRENGTHBUFF;
 
         if (AbstractDungeon.ascensionLevel >= 4) {
             this.lightBreathDmg = LIGHTBREATH_DMG_HIGHASC;
@@ -135,45 +135,39 @@ public class BossNinian extends AbstractCardMonster {
 
         if (AbstractDungeon.ascensionLevel >= 9) {
             this.setHp(NINIAN_HP_HIGHASC);
-            this.lightBreathBlock = LIGHTBREATH_BLOCK_HIGHASC;
             this.blockBuffDuration = BLOCKBUFF_DURATION_HIGHASC;
             this.blockBuffValue = BLOCKBUFF_VALUE_HIGHASC;
-            this.escapeRouteBlock = ESCAPEROUTE_BLOCK_HIGHASC;
             this.despairVulnerableValue = DESPAIR_VULNERABLE_VALUE_HIGHASC;
         } else {
             this.setHp(NINIAN_HP);
-            this.lightBreathBlock = LIGHTBREATH_BLOCK;
             this.blockBuffDuration = BLOCKBUFF_DURATION;
             this.blockBuffValue = BLOCKBUFF_VALUE;
-            this.escapeRouteBlock = ESCAPEROUTE_BLOCK;
             this.despairVulnerableValue = DESPAIR_VULNERABLE_VALUE;
         }
 
         if (AbstractDungeon.ascensionLevel >= 19) {
+            this.lightBreathBlock = LIGHTBREATH_BLOCK_HIGHASC;
             this.iceBreathDebuff = ICEBREATH_DEBUFF_HIGHASC;
             this.iceBreathDebuffDuration = ICEBREATH_DEBUFF_DURATION_HIGHASC;
+            this.escapeRouteBlock = ESCAPEROUTE_BLOCK_HIGHASC;
             this.despairVulnerableCards = DESPAIR_VULNERABLE_CARDS_HIGHASC;
             this.despairWeakOnBlockBreak = DESPAIR_WEAKONHIT_HIGHASC;
-            this.lightBreathStr = LIGHTBREATH_STRENGTHBUFF_HIGHASC;
         } else {
+            this.lightBreathBlock = LIGHTBREATH_BLOCK;
             this.iceBreathDebuff = ICEBREATH_DEBUFF;
             this.iceBreathDebuffDuration = ICEBREATH_DEBUFF_DURATION;
+            this.escapeRouteBlock = ESCAPEROUTE_BLOCK;
             this.despairVulnerableCards = DESPAIR_VULNERABLE_CARDS;
             this.despairWeakOnBlockBreak = DESPAIR_WEAKONHIT;
-            this.lightBreathStr = LIGHTBREATH_STRENGTHBUFF;
         }
 
-        addMove(MOVE_LIGHTBREATH, IntentEnums.MASS_ATTACK, this.lightBreathDmg);
-        addMove(MOVE_ICEBREATH, IntentEnums.MASS_ATTACK, this.iceBreathDmg);
+        addMove(MOVE_LIGHTBREATH, Intent.ATTACK_BUFF, this.lightBreathDmg);
+        addMove(MOVE_ICEBREATH, Intent.ATTACK_DEBUFF, this.iceBreathDmg);
         addMove(MOVE_ESCAPEROUTE, Intent.DEFEND);
         addMove(MOVE_BLOCKBUFF, Intent.BUFF);
-        addMove(MOVE_ULTIMATE, IntentEnums.MASS_ATTACK, this.ultimateBaseDmg);
+        addMove(MOVE_ULTIMATE, Intent.ATTACK, this.ultimateBaseDmg);
 
-        cardList.add(new BossLightBreath(this));
-        cardList.add(new BossIceBreath(this));
-        cardList.add(new BossEscapeRoute(this));
-        cardList.add(new BossNinisGrace(this));
-        cardList.add(new BossGlacies(this));
+
     }
 
     @Override
@@ -181,34 +175,17 @@ public class BossNinian extends AbstractCardMonster {
         // AbstractDungeon.getCurrRoom().playBgmInstantly("a1_boss_NinianEliwood");
         atb(new SFXAction("NinianOpening"));
         atb(new TalkAction(this, DIALOG[0]));
-        atb(new ApplyPowerAction(this, this, new StrengthPower(this, despairBasestrpenalty)));
+
+        atb(new ApplyPowerAction(this, this, new StrengthPower(this, this.despairBasestrpenalty)));
         atb(new ApplyPowerAction(this, this, new SomberPower(this, despairVulnerableCards, despairVulnerableValue)));
         atb(new ApplyPowerAction(this, this, new EnfeebledBodyPower(this, this.despairWeakOnBlockBreak)));
         atb(new ApplyPowerAction(this, this, new BarricadePower(this)));
-        atb(new ApplyPowerAction(this, this, new InvisNinianWeaknessPower(this, NINIAN_WEAKNESS_BONUS)));
-        // init instance of eliwood for ondeath method
-        for (AbstractMonster mo : AbstractDungeon.getCurrRoom().monsters.monsters) {
-            if (mo instanceof BossEliwood) {
-                eliwood = (BossEliwood)mo;
-            }
-        }
-    }
 
-    // required for AOE attacks to properly affect the player and ally monsters (eliwood)
-    private void doMassAttack(DamageInfo info) {
-        int[] damageArray = new int[AbstractDungeon.getMonsters().monsters.size() + 1];
-        info.applyPowers(this, AbstractDungeon.player);
-        damageArray[damageArray.length - 1] = info.output;
-        for (int i = 0; i < AbstractDungeon.getMonsters().monsters.size(); i++) {
-            AbstractMonster mo = AbstractDungeon.getMonsters().monsters.get(i);
-            info.applyPowers(this, mo);
-            damageArray[i] = info.output;
-        }
-        att(new DamageAllOtherCharactersAction(this, damageArray, DamageInfo.DamageType.NORMAL, AbstractGameAction.AttackEffect.NONE));
     }
 
     @Override
     public void takeTurn() {
+
         logger.info("current move counter = " + moveCounter + " and current move is " + this.nextMove);
 
         DamageInfo di;
@@ -224,6 +201,7 @@ public class BossNinian extends AbstractCardMonster {
 
         switch (this.nextMove) {
             case MOVE_LIGHTBREATH:
+                logger.info("bossNinian about to execute LightBreath");
                 if (!voicelinePlayedAttacking) {
                     voicelinePlayedAttacking = true;
                     atb(new SFXAction("NinianAttacking"));
@@ -232,11 +210,10 @@ public class BossNinian extends AbstractCardMonster {
                 atb(new SFXAction("ATTACK_MAGIC_BEAM_SHORT", 0.75F));
                 atb(new VFXAction(new BorderFlashEffect(Color.WHITE)));
                 atb(new VFXAction(new MindblastEffect(this.dialogX, this.dialogY, this.flipHorizontal)));
-                doMassAttack(di);
-                atb(new GainBlockAction(this, this, lightBreathBlock));
-                atb(new ApplyPowerAction(this, this, new StrengthPower(this, lightBreathStr)));
+                dmg(adp(), di);
                 break;
             case MOVE_ICEBREATH:
+                logger.info("bossNinian about to execute IceBreatj");
                 if (!voicelinePlayedAttacking) {
                     voicelinePlayedAttacking = true;
                     atb(new SFXAction("NinianAttacking"));
@@ -246,16 +223,11 @@ public class BossNinian extends AbstractCardMonster {
                 atb(new SFXAction("ATTACK_MAGIC_BEAM_SHORT", 0.34F));
                 CardCrawlGame.sound.play("ORB_FROST_CHANNEL", 0.1F);
                 atb(new VFXAction(new BorderFlashEffect(Color.BLUE)));
-                doMassAttack(di);
+                dmg(adp(), di);
                 applyToTarget(AbstractDungeon.player, this, new ChillDefensePower(AbstractDungeon.player, this.iceBreathDebuff, this.iceBreathDebuffDuration, true));
-                // why loop for each monster? in case stuff like roaming minibosses appear. this should only affect player and eliwood
-                for (AbstractMonster mo : AbstractDungeon.getCurrRoom().monsters.monsters) {
-                    if (mo.id.equals(BossEliwood.ID)) {
-                        applyToTarget(mo, this, new ChillDefensePower(mo, this.iceBreathDebuff, this.iceBreathDebuffDuration, true));
-                    }
-                }
                 break;
             case MOVE_ESCAPEROUTE:
+                logger.info("bossNinian about to execute EscRoute");
                 if (!voicelinePlayedDefending) {
                     voicelinePlayedDefending = true;
                     atb(new SFXAction("NinianDefending"));
@@ -264,17 +236,17 @@ public class BossNinian extends AbstractCardMonster {
                 atb(new GainBlockAction(this, this.escapeRouteBlock));
                 break;
             case MOVE_BLOCKBUFF:
+                logger.info("bossNinian about to execute BlockBuff");
                 if (!voicelinePlayedDefending) {
                     voicelinePlayedDefending = true;
                     atb(new SFXAction("NinianDefending"));
                     atb(new TalkAction(this, DIALOG[2]));
                 }
                 CardCrawlGame.sound.play("ORB_FROST_EVOKE", 0.1F);
-                logger.info("NinisGrace buffValue is " + this.blockBuffValue);
                 applyToTarget(this, this, new NinisGracePower(this, this.blockBuffDuration, this.blockBuffValue));
                 break;
             case MOVE_ULTIMATE: // i.e. glacies. use defect's blizzard effect
-                logger.info("bossNinian about to execute Ultimate. base damage intended is " + di.base);
+                logger.info("bossNinian about to execute Ultimate");
                 if (!voicelinePlayedUltimate) {
                     voicelinePlayedUltimate = true;
                     atb(new SFXAction("NinianUltimate"));
@@ -285,14 +257,7 @@ public class BossNinian extends AbstractCardMonster {
                 } else {
                     atb(new VFXAction(new BlizzardEffect(4, AbstractDungeon.getMonsters().shouldFlipVfx()), 1.10F));
                 }
-                logger.info("BN current block is " + this.currentBlock);
-                if (di.base > -1) {
-                    int blockToAdd = this.currentBlock;
-                    di.base = this.ultimateBaseDmg + blockToAdd;
-                    di.applyPowers(this, adp());
-                    logger.info("ultimate calced damage IN SWITCH CASE is " + di.base);
-                }
-                doMassAttack(di);
+                dmg(adp(), di);
                 break;
         }
         if (moveCounter == 6) {
@@ -300,54 +265,59 @@ public class BossNinian extends AbstractCardMonster {
         } else {
             moveCounter++;
         }
+        logger.info("current move counter after BN took her turn is = " + moveCounter);
         atb(new RollMoveAction(this));
     }
 
     @Override
     protected void getMove(int i) {
         boolean highAsc = AbstractDungeon.ascensionLevel >= 19;
+        logger.info("are we fighting BN on high asc? the answer is " + highAsc + " and we're on asc level " + AbstractDungeon.ascensionLevel );
         /*
-        * reminder:
-        * light breath = 0, ice breath = 1
-        * escape route = 2, ninis grace = 3
-        * glacies (ultimate) = 4
-        * also applies to move array names
-        * */
+         * reminder:
+         * light breath = 0, ice breath = 1
+         * escape route = 2, ninis grace = 3
+         * glacies (ultimate) = 4
+         * also applies to move array names
+         * */
         if (highAsc) {
             if (moveCounter == 1) {
-                setMoveShortcut(MOVE_ESCAPEROUTE, MOVES[2], cardList.get(2).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_ESCAPEROUTE, MOVES[2]);
             }
             if (moveCounter == 2) {
-                setMoveShortcut(MOVE_ULTIMATE, MOVES[4], cardList.get(4).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_ULTIMATE, MOVES[4]);
             }
             if (moveCounter == 3) {
-                setMoveShortcut(MOVE_BLOCKBUFF, MOVES[3], cardList.get(3).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_BLOCKBUFF, MOVES[3]);
             }
             if (moveCounter == 4) {
-                setMoveShortcut(MOVE_ICEBREATH, MOVES[1], cardList.get(1).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_ICEBREATH, MOVES[1]);
             }
             if (moveCounter == 5) {
-                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0]);
+            }
+            if (moveCounter == 6) {
+                setMoveShortcut(MOVE_ULTIMATE, MOVES[4]);
             }
         } else {
             if (moveCounter == 1) {
-                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0]);
             }
             if (moveCounter == 2) {
-                setMoveShortcut(MOVE_ICEBREATH, MOVES[1], cardList.get(1).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_ICEBREATH, MOVES[1]);
             }
             if (moveCounter == 3) {
-                setMoveShortcut(MOVE_BLOCKBUFF, MOVES[3], cardList.get(3).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_BLOCKBUFF, MOVES[3]);
             }
             if (moveCounter == 4) {
-                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_LIGHTBREATH, MOVES[0]);
             }
             if (moveCounter == 5) {
-                setMoveShortcut(MOVE_ESCAPEROUTE, MOVES[2], cardList.get(2).makeStatEquivalentCopy());
+                setMoveShortcut(MOVE_ESCAPEROUTE, MOVES[2]);
             }
-        }
-        if (moveCounter == 6) {
-            setMoveShortcut(MOVE_ULTIMATE, MOVES[4], cardList.get(4).makeStatEquivalentCopy());
+            if (moveCounter == 6) {
+                setMoveShortcut(MOVE_ULTIMATE, MOVES[4]);
+            }
         }
     }
 
@@ -356,7 +326,6 @@ public class BossNinian extends AbstractCardMonster {
         super.createIntent();
         applyPowers();
     }
-
 
     @Override
     public void applyPowers() {
@@ -368,13 +337,12 @@ public class BossNinian extends AbstractCardMonster {
         if (this.nextMove == MOVE_ULTIMATE) {
             if (di.base > -1) {
                 int blockToAdd = this.currentBlock;
-                di.base = this.ultimateBaseDmg + blockToAdd;
-                logger.info("ultimate calced damage IN APPLY POWERS is " + di.base);
-                di.applyPowers(this, adp());
-                ReflectionHacks.setPrivate(this, AbstractMonster.class, "intentDmg", di.output);
+                di.base += blockToAdd;
+                // TODO handle dynamic intent preview here?
             }
+        } else {
+            super.applyPowers();
         }
-        super.applyPowers();
     }
 
     @Override
@@ -385,11 +353,7 @@ public class BossNinian extends AbstractCardMonster {
         atb(new TalkAction(this, DIALOG[4]));
         // non cosmetic logic
         super.die(triggerRelics);
-        eliwood.onNinianDeath();
         this.onBossVictoryLogic();
     }
 
 }
-
-
-

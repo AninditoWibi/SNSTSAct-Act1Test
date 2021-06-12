@@ -3,18 +3,18 @@
                 "NAME": "Arcadian Vision",
                 "DESCRIPTIONS": [
                         "For #b",
-                        " turn, attack damage dealt and Block gained by this creature are increased by #b",
-                        " turns, attack damage dealt and Block gained by this creature are increased by #b",
+                        " turn, attack damage dealt and Block gained by this creature are both increased by #b",
+                        " turns, attack damage dealt and Block gained by this creature are both increased by #b",
                         "."
                 ]
         },
         "SNAct1:ArdentAspectPower": {
                 "NAME": "Ardent Aspect",
-                "DESCRIPTIONS": ["At the start of your turn, YOU gain #b", " #yStrength and this creature gains #b", " #yStrength."]
+                "DESCRIPTIONS": ["At the start of your turn, if YOU have positive #yStrength or #yDexterity, gain temporary #yStrength or #yDexterity equal to that amount."]
         },
         "SNAct1:BlazingAspectPower": {
                 "NAME": "Blazing Aspect",
-                "DESCRIPTIONS": ["Whenever this creature attacks, if it has more #yStrength than the target, it gains temporary #yStrength next turn equal to the difference."]
+                "DESCRIPTIONS": ["Whenever this creature deals unblocked damage, YOU gain #b", " #yStrength and #b", " #yDexterity."]
         },
         "SNAct1:ChillDefensePower": {
                 "NAME": "Chill Defense",

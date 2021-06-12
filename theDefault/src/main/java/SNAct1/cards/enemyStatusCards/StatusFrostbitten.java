@@ -21,7 +21,6 @@ public class StatusFrostbitten extends AbstractSNActCard {
     public final static String ID = makeID(StatusFrostbitten.class.getSimpleName());
     private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings(ID);
     public static final String NAME = cardStrings.NAME;
-    public static final String DESCRIPTION = cardStrings.DESCRIPTION;
 
     private static final int COST = 4;
     // at the end of your turn, if this is in your hand, take blockable damage = cost of this, then reduce cost by 1

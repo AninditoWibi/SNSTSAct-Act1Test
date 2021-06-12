@@ -20,8 +20,12 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.MonsterStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.BlurPower;
+import com.megacrit.cardcrawl.powers.LoseStrengthPower;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.vfx.combat.CleaveEffect;
+import org.apache.logging.log4j.LogManager;
 
 import static SNAct1.util.Wiz.*;
 
@@ -39,18 +43,18 @@ public class BossEliwood extends AbstractAllyCardMonster {
     private static final byte MOVE_CHILLATK = 2;
     private static final byte MOVE_DMGBLOCKBUFF = 3;
 
-    private static final int DEATHBLOW_DMG = 50;
-    private static final int DEATHBLOW_DMG_HIGHASC = 52;
+    private static final int DEATHBLOW_DMG = 40;
+    private static final int DEATHBLOW_DMG_HIGHASC = 41;
     private static final int DEATHBLOW_STRENGTHBUFF = 2;
     public int deathBlowDmg;
     public int deathBlowStr;
 
-    private static final int MASSBLOCK_BLOCK = 30;
-    private static final int MASSBLOCK_BLOCK_HIGHASC = 33;
+    private static final int MASSBLOCK_BLOCK = 32;
+    private static final int MASSBLOCK_BLOCK_HIGHASC = 34;
     public int massBlockBlock;
 
-    private static final int CHILLATK_STRENGTHDEBUFF = 6;
-    private static final int CHILLATK_STRENGTHDEBUFF_HIGHASC = 5;
+    private static final int CHILLATK_STRENGTHDEBUFF = 5;
+    private static final int CHILLATK_STRENGTHDEBUFF_HIGHASC = 6;
     public int chillAtkDebuff;
 
     private static final int DMGBLOCKBUFF_BONUS = 2;
@@ -58,18 +62,19 @@ public class BossEliwood extends AbstractAllyCardMonster {
     public int dmgBlockBuffBonus;
     public int dmgBlockBuffDuration;
 
-    private static final int ELIWOOD_HP = 175;
-    private static final int ELIWOOD_HP_HIGHASC = 180;
+    private static final int ELIWOOD_HP = 125;
+    private static final int ELIWOOD_HP_HIGHASC = 150;
     private static final int DURANDAL_DAMAGEBONUS = 100;
-    private static final int ARDENT_PLAYER_STRENGTHBUFF = 3;
-    private static final int ARDENT_SELF_STRENGTHBUFF = 1;
+    private static final int BLAZING_STR_GAIN = 3;
+    private static final int BLAZING_DEX_GAIN = 3;
 
     public BossNinian ninian;
+    private int moveCounter = 1;
     private boolean voicelinePlayedAttack;
     private boolean voicelinePlayedBlock;
     private boolean voicelinePlayedDebuff;
     private boolean voicelinePlayedBuff;
-    private boolean firstMove = true;
+    public static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(SNAct1Mod.class.getName());
 
     public BossEliwood(final float x, final float y) {
         super(BossEliwood.NAME, ID, ELIWOOD_HP, -5.0F, 0, 181.0f, 187.0f, IMG, x, y);
@@ -131,23 +136,22 @@ public class BossEliwood extends AbstractAllyCardMonster {
             }
         }
         AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new WielderOfDurandalPower(this, DURANDAL_DAMAGEBONUS)));
-        AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new BlazingAspectPower(this)));
-        AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new ArdentAspectPower(this, ARDENT_PLAYER_STRENGTHBUFF, ARDENT_SELF_STRENGTHBUFF)));
+        AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new BlazingAspectPower(this, BLAZING_STR_GAIN, BLAZING_DEX_GAIN)));
+        AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new ArdentAspectPower(this)));
+        AbstractDungeon.actionManager.addToBottom(new ApplyPowerAction(this, this, new InvisEliwoodArdentPower(AbstractDungeon.player)));
         // non-hardmode ninian attacks on turn 1, give block to compensate
         if (AbstractDungeon.ascensionLevel < 19) {
-            AbstractDungeon.actionManager.addToBottom(new GainBlockAction(this, this.massBlockBlock));
+            atb(new GainBlockAction(this, this.massBlockBlock));
         }
     }
 
     @Override
     public void takeTurn() {
+        logger.info("current move is " + this.nextMove);
         if (this.isDead) {
             return;
         }
-
-        if (this.firstMove) {
-            firstMove = false;
-        }
+        super.takeTurn();
 
         DamageInfo di;
         AbstractCreature target = ninian;
@@ -164,6 +168,7 @@ public class BossEliwood extends AbstractAllyCardMonster {
 
         switch (this.nextMove) {
             case MOVE_DEATHBLOW: {
+                logger.info("bossEliwood about to execute DeathBlow");
                 if (!voicelinePlayedAttack) {
                     voicelinePlayedAttack = true;
                     atb(new SFXAction("EliwoodAttacking"));
@@ -173,9 +178,29 @@ public class BossEliwood extends AbstractAllyCardMonster {
                 atb(new VFXAction(this, new CleaveEffect(), 0.1F));
                 dmg(target, di);
                 atb(new ApplyPowerAction(this, this, new StrengthPower(this, deathBlowStr)));
+                //blazing aspect logic
+                AbstractPower ownStr = this.getPower("StrengthPower");
+                AbstractPower tgtStr = target.getPower("StrengthPower");
+                int ownStrAmt = 0;
+                int tgtStrAmt = 0;
+
+                if (ownStr != null) {
+                    ownStrAmt = ownStr.amount;
+                }
+
+                if (tgtStr != null) {
+                    tgtStrAmt = tgtStr.amount;
+                }
+
+                if (ownStrAmt > tgtStrAmt) {
+                    int bonusStr = ownStrAmt - tgtStrAmt;
+                    applyToTargetNextTurn(this, new StrengthPower(this, bonusStr));
+                    applyToTargetNextTurn(this, new LoseStrengthPower(this, bonusStr));
+                }
                 break;
             }
             case MOVE_MASSBLOCK: {
+                logger.info("bossEliwood about to execute MassBlock");
                 if (!voicelinePlayedBlock) {
                     voicelinePlayedBlock = true;
                     atb(new SFXAction("EliwoodDefending"));
@@ -186,6 +211,7 @@ public class BossEliwood extends AbstractAllyCardMonster {
                 break;
             }
             case MOVE_CHILLATK: {
+                logger.info("bossEliwood about to execute ChillAtk");
                 if (!voicelinePlayedDebuff) {
                     voicelinePlayedDebuff = true;
                     atb(new SFXAction("EliwoodDebuff"));
@@ -195,6 +221,7 @@ public class BossEliwood extends AbstractAllyCardMonster {
                 break;
             }
             case MOVE_DMGBLOCKBUFF: {
+                logger.info("bossEliwood about to execute Visions");
                 if (!voicelinePlayedBuff) {
                     voicelinePlayedBuff = true;
                     atb(new SFXAction("EliwoodBuff"));
@@ -204,6 +231,11 @@ public class BossEliwood extends AbstractAllyCardMonster {
                 atb(new ApplyPowerAction(this, this, new ArcadianVisionPower(this, dmgBlockBuffBonus, dmgBlockBuffDuration, true)));
                 break;
             }
+        }
+        if (moveCounter == 4) {
+            moveCounter = 1;
+        } else {
+            moveCounter++;
         }
         atb(new RollMoveAction(this));
     }
@@ -216,20 +248,17 @@ public class BossEliwood extends AbstractAllyCardMonster {
          * reduce str = 2, visions buff = 3
          * also applies to move array names
          * */
-        if (this.firstMove) {
+        if (moveCounter == 1) {
             setMoveShortcut(MOVE_DEATHBLOW, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
         }
-        if (this.lastMove(MOVE_DEATHBLOW)) {
+        if (moveCounter == 2) {
             setMoveShortcut(MOVE_MASSBLOCK, MOVES[1], cardList.get(1).makeStatEquivalentCopy());
         }
-        if (this.lastMove(MOVE_MASSBLOCK)) {
+        if (moveCounter == 3) {
             setMoveShortcut(MOVE_DMGBLOCKBUFF, MOVES[3], cardList.get(3).makeStatEquivalentCopy());
         }
-        if (this.lastMove(MOVE_DMGBLOCKBUFF)) {
+        if (moveCounter == 4) {
             setMoveShortcut(MOVE_CHILLATK, MOVES[2], cardList.get(2).makeStatEquivalentCopy());
-        }
-        if (this.lastMove(MOVE_CHILLATK)) {
-            setMoveShortcut(MOVE_DEATHBLOW, MOVES[0], cardList.get(0).makeStatEquivalentCopy());
         }
     }
 
@@ -249,6 +278,6 @@ public class BossEliwood extends AbstractAllyCardMonster {
     public void die() {
         atb(new SFXAction("EliwoodDeath"));
         atb(new TalkAction(this, DIALOG[5]));
-
+        super.die();
     }
 }

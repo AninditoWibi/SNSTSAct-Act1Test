@@ -1,5 +1,6 @@
 package SNAct1.patches;
 
+import SNAct1.SNAct1Mod;
 import SNAct1.powers.ArcadianVisionPower;
 import SNAct1.powers.ChillDefensePower;
 import SNAct1.powers.NinisGracePower;
@@ -8,6 +9,7 @@ import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import javassist.CtBehavior;
+import org.apache.logging.log4j.LogManager;
 
 @SpirePatch(
         clz = AbstractCreature.class,
@@ -20,6 +22,7 @@ import javassist.CtBehavior;
 
 // thanks to darkglade and squeeny for this
 public class FindPlayerBlockGainPatch {
+    public static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(SNAct1Mod.class.getName());
     @SpireInsertPatch(locator = FindPlayerBlockGainPatch.Locator.class, localvars = {"tmp"})
     public static void TriggerOnGainedBlock(AbstractCreature instance, @ByRef float[] tmp) {
         if (instance.isPlayer) {
@@ -28,6 +31,7 @@ public class FindPlayerBlockGainPatch {
                     // tfw i remember starbreaker and her steal-buff card exists
                     if (p.ID.equals(NinisGracePower.POWER_ID)) {
                         NinisGracePower ngp = (NinisGracePower)p;
+                        logger.info("ninisgracepower patch detected on player");
                         tmp[0] = ngp.onOwnerGainedBlock(tmp[0]);
                     }
                     if (p.ID.equals(ChillDefensePower.POWER_ID)) {

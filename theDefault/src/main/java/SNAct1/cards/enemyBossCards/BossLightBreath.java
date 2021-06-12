@@ -19,7 +19,7 @@ public class BossLightBreath extends AbstractSNActCard {
         this.cardOwner = cardOwner;
         this.baseDamage = cardOwner.lightBreathDmg;
         this.baseBlock = cardOwner.lightBreathBlock;
-        this.magicNumber = cardOwner.lightBreathStr;
+        this.magicNumber = baseMagicNumber = cardOwner.lightBreathStr;
     }
 
     @Override

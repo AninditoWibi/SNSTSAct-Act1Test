@@ -64,6 +64,6 @@ public class SoulChargePower extends TwoAmountPower {
         if (type != DamageInfo.DamageType.NORMAL) {
             return damage;
         }
-        return damage * (1 + (amount2 / 100));
+        return damage * (1 + ((float)amount2 / 100f));
     }
 }

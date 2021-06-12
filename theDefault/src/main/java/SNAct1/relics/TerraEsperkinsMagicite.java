@@ -14,8 +14,8 @@ import static SNAct1.util.Wiz.atb;
 public class TerraEsperkinsMagicite extends CustomRelic {
 
     public static final String ID = SNAct1Mod.makeID(TerraEsperkinsMagicite.class.getSimpleName());
-    private static String pathToImg = SNAct1Mod.makeRelicPath("TerraEsperkinsMagicite.png");
-    private static String pathToImgOutline = SNAct1Mod.makeRelicOutlinePath("TerraEsperkinsMagicite.png");
+    private static String pathToImg = SNAct1Mod.makeRelicPath("TerraEsperkinMagicite.png");
+    private static String pathToImgOutline = SNAct1Mod.makeRelicOutlinePath("TerraEsperkinMagicite.png");
 
     private static final Texture IMG = TexLoader.getTexture(pathToImg);
     private static final Texture OUTLINE = TexLoader.getTexture(pathToImgOutline);
@@ -23,7 +23,7 @@ public class TerraEsperkinsMagicite extends CustomRelic {
     private boolean triggeredThisTurn = false;
 
     public TerraEsperkinsMagicite() {
-        super(ID, IMG, OUTLINE, RelicTier.RARE, LandingSound.MAGICAL);
+        super(ID, IMG, OUTLINE, RelicTier.BOSS, LandingSound.MAGICAL);
     }
 
     public String getUpdatedDescription() {

@@ -1,5 +1,6 @@
 package SNAct1.patches;
 
+import SNAct1.SNAct1Mod;
 import SNAct1.powers.ArcadianVisionPower;
 import SNAct1.powers.ChillDefensePower;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,6 +10,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import javassist.CtBehavior;
 
 import SNAct1.powers.NinisGracePower;
+import org.apache.logging.log4j.LogManager;
 
 @SpirePatch(
         clz = AbstractCreature.class,
@@ -21,6 +23,7 @@ import SNAct1.powers.NinisGracePower;
 
 // thanks to darkglade and squeeny for this
 public class FindMonsterBlockGainPatch {
+    public static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(SNAct1Mod.class.getName());
     @SpireInsertPatch(locator = FindMonsterBlockGainPatch.Locator.class, localvars = {"tmp"})
     public static void TriggerOnGainedBlock(AbstractCreature instance, int blockAmount, @ByRef float[] tmp) {
         if (!instance.isPlayer) {
@@ -29,6 +32,7 @@ public class FindMonsterBlockGainPatch {
                 for (AbstractPower p : enemy.powers) {
                     if (p.ID.equals(NinisGracePower.POWER_ID)) {
                         NinisGracePower ngp = (NinisGracePower)p;
+                        logger.info("ninisgracepower patch detected on monster");
                         tmp[0] = ngp.onOwnerGainedBlock(tmp[0]);
                     }
                     if (p.ID.equals(ChillDefensePower.POWER_ID)) {

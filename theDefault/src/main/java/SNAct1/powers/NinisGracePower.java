@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import org.apache.logging.log4j.LogManager;
 
 import static SNAct1.SNAct1Mod.makePowerPath;
 
@@ -17,6 +18,7 @@ public class NinisGracePower extends AbstractPower {
     private static final PowerStrings powerStrings = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
     public static final String NAME = powerStrings.NAME;
     public static final String[] DESCRIPTIONS = powerStrings.DESCRIPTIONS;
+    public static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(SNAct1Mod.class.getName());
 
     int blockGainMult; // 50 = 50% more block, etc
 
@@ -44,7 +46,12 @@ public class NinisGracePower extends AbstractPower {
     }
 
     public float onOwnerGainedBlock(float blockAmount) {
-        float modifiedBlockAmount = blockAmount * (1 + (blockGainMult / 100));
+        logger.info("NGP patch pass, our blockamt is " + blockAmount);
+        logger.info("NGP patch pass, our initial mult is  " + blockGainMult);
+        float convertedMultiplier = ((float)this.blockGainMult) / 100f;
+        logger.info("NGP patch pass, our convertedmult is " + convertedMultiplier);
+        float modifiedBlockAmount = blockAmount * (1 + (convertedMultiplier));
+        logger.info("NGP patch pass, our final blockamt is " + modifiedBlockAmount);
         amount--;
 
         if (this.amount == 0) {

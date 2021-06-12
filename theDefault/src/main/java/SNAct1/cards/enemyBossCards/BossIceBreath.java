@@ -18,7 +18,7 @@ public class BossIceBreath extends AbstractSNActCard {
         super(ID, 2, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY, CardColor.COLORLESS);
         this.cardOwner = cardOwner;
         this.baseDamage = cardOwner.iceBreathDmg;
-        this.magicNumber = cardOwner.iceBreathDebuff;
+        this.magicNumber = baseMagicNumber = cardOwner.iceBreathDebuff;
         this.secondMagicNumber = baseSecondMagicNumber = cardOwner.iceBreathDebuffDuration;
     }
 

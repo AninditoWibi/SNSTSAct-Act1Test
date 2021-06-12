@@ -1,9 +1,10 @@
 package SNAct1;
 
 import SNAct1.CustomIntent.MassAttackIntent;
-import SNAct1.cards.cardvars.SecondMagicNumber;
+import SNAct1.variables.SecondMagicNumber;
 import SNAct1.monsters.BossEliwood;
 import SNAct1.monsters.BossNinian;
+import SNAct1.monsters.BossNinianSimple;
 import SNAct1.relics.*;
 import actlikeit.RazIntent.CustomIntent;
 import basemod.*;
@@ -71,7 +72,6 @@ public class SNAct1Mod implements
         EditKeywordsSubscriber,
         AddAudioSubscriber,
         PostBattleSubscriber,
-        PreMonsterTurnSubscriber,
         PostInitializeSubscriber {
     // Make sure to implement the subscribers *you* are using (read basemod wiki). Editing cards? EditCardsSubscriber.
     // Making relics? EditRelicsSubscriber. etc., etc., for a full list and how to make your own, visit the basemod wiki.
@@ -244,7 +244,7 @@ public class SNAct1Mod implements
     // ====== YOU CAN EDIT AGAIN ======
 
     public static void initialize() {
-        SNAct1Mod snmod = new SNAct1Mod();
+        SNAct1Mod snact1mod = new SNAct1Mod();
     }
 
     // ============== /SUBSCRIBE, CREATE THE COLOR_GRAY, INITIALIZE/ =================
@@ -269,7 +269,12 @@ public class SNAct1Mod implements
         BaseMod.addMonster(BossNinian.ID, "Boss-NinianEliwood", () -> new MonsterGroup(
                 new AbstractMonster[]{
                         new BossEliwood(-550.0F, 0.0F),
-                        new BossNinian(200.0F, 0.0F),
+                        new BossNinian(200.0F, 0.0F)
+                }));
+
+        BaseMod.addMonster(BossNinianSimple.ID, "Boss-NinianEliwood", () -> new MonsterGroup(
+                new AbstractMonster[]{
+                        new BossNinianSimple(180.0F, 0.0F)
                 }));
 
         logger.info("Done loading badge Image and mod options");
@@ -448,8 +453,4 @@ public class SNAct1Mod implements
 
     }
 
-    @Override
-    public boolean receivePreMonsterTurn(AbstractMonster abstractMonster) {
-        return false;
-    }
 }

@@ -16,7 +16,7 @@ public class IroncladSacredFlame extends CustomRelic {
 
     public static final String ID = SNAct1Mod.makeID("IroncladSacredFlame");
     private static String pathToImg = SNAct1Mod.makeRelicPath("IroncladSacredFlame.png");
-    private static String pathToImgOutline = SNAct1Mod.makeRelicOutlinePath("IroncladSacredFlameOutline.png");
+    private static String pathToImgOutline = SNAct1Mod.makeRelicOutlinePath("IroncladSacredFlame.png");
 
     private static final Texture IMG = TexLoader.getTexture(pathToImg);
     private static final Texture OUTLINE = TexLoader.getTexture(pathToImgOutline);

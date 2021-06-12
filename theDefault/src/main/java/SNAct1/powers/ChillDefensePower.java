@@ -61,7 +61,7 @@ public class ChillDefensePower extends TwoAmountPower {
     }
     // see find X blockgainpatch.java
     public float onOwnerGainedBlock(float blockAmount) {
-        float modifiedBlockAmount = blockAmount + amount2;
+        float modifiedBlockAmount = blockAmount + -amount2;
         return modifiedBlockAmount;
     }
 }
