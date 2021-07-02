@@ -44,7 +44,7 @@ public class StatusFrostbitten extends AbstractSNActCard {
 
     public void triggerOnEndOfTurnForPlayingCard() {
         this.dontTriggerOnUseCard = true;
-        AbstractDungeon.actionManager.cardQueue.add(new CardQueueItem(this, true));
+        // AbstractDungeon.actionManager.cardQueue.add(new CardQueueItem(this, true));
     }
 
     public void onRetained() {

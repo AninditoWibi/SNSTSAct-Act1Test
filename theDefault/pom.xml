@@ -7,9 +7,9 @@
     <!--Hello! You'll basically should only need to change these names and the steam path (just below)-->
     <!--The author name(s) as they appear in MTS and any other comments are in your ModTheSpire.json-->
     <groupId>SNActMod</groupId>
-    <artifactId>SNAct1Test</artifactId> <!--Keep a note of this one: this is the ID used in the "auto add cards" method-->
+    <artifactId>SNAct1</artifactId> <!--Keep a note of this one: this is the ID used in the "auto add cards" method-->
     <name>SN Act 1 - Interdimensional Rifts WIP</name>
-    <version>0.1</version>
+    <version>0.1512</version>
     <description>A test mod for SN's act 1.</description>
 
     <properties>

@@ -1,7 +1,6 @@
 package SNAct1.cards;
 
 import basemod.abstracts.CustomCard;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.CommonKeywordIconsField;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
@@ -25,6 +24,11 @@ public abstract class AbstractSNActCard extends CustomCard {
     public boolean upgradedSecondMagic;
     public boolean isSecondMagicModified;
 
+    public int thirdMagicNumber;
+    public int baseThirdMagicNumber;
+    public boolean upgradedThirdMagic;
+    public boolean isThirdMagicModified;
+
     public int secondDamage;
     public int baseSecondDamage;
     public boolean upgradedSecondDamage;
@@ -42,7 +46,6 @@ public abstract class AbstractSNActCard extends CustomCard {
         name = originalName = cardStrings.NAME;
         initializeTitle();
         initializeDescription();
-        CommonKeywordIconsField.useIcons.set(this, true);
     }
 
     public AbstractSNActCard(final String cardID, final int cost, final CardType type, final CardRarity rarity, final CardTarget target, final CardColor color, String img) {
@@ -53,7 +56,6 @@ public abstract class AbstractSNActCard extends CustomCard {
         name = originalName = cardStrings.NAME;
         initializeTitle();
         initializeDescription();
-        CommonKeywordIconsField.useIcons.set(this, true);
     }
 
     @Override
@@ -98,6 +100,8 @@ public abstract class AbstractSNActCard extends CustomCard {
         super.resetAttributes();
         secondMagicNumber = baseSecondMagicNumber;
         isSecondMagicModified = false;
+        thirdMagicNumber = baseThirdMagicNumber;
+        isThirdMagicModified = false;
         secondDamage = baseSecondDamage;
         isSecondDamageModified = false;
     }
@@ -107,6 +111,10 @@ public abstract class AbstractSNActCard extends CustomCard {
         if (upgradedSecondMagic) {
             secondMagicNumber = baseSecondMagicNumber;
             isSecondMagicModified = true;
+        }
+        if (upgradedThirdMagic) {
+            thirdMagicNumber = baseThirdMagicNumber;
+            isThirdMagicModified = true;
         }
         if (upgradedSecondDamage) {
             secondDamage = baseSecondDamage;
@@ -118,6 +126,12 @@ public abstract class AbstractSNActCard extends CustomCard {
         baseSecondMagicNumber += amount;
         secondMagicNumber = baseSecondMagicNumber;
         upgradedSecondMagic = true;
+    }
+
+    protected void upgradeThirdMagic(int amount) {
+        baseThirdMagicNumber += amount;
+        thirdMagicNumber = baseThirdMagicNumber;
+        upgradedThirdMagic = true;
     }
 
     protected void upgradeSecondDamage(int amount) {

@@ -19,9 +19,7 @@ public class FindCardGenWatcherHymnal {
     public static class CardCreatedPatch {
         @SpirePrefixPatch
         public static void cardCreated(AbstractGameEffect __instance) {
-
             float startDuration = ReflectionHacks.getPrivateStatic(ShowCardAndAddToDiscardEffect.class, "EFFECT_DUR");
-
             if (__instance.duration == startDuration) {
                 if (AbstractDungeon.player.hasRelic(WatcherHymnal.ID)) {
                     WatcherHymnal r = (WatcherHymnal)AbstractDungeon.player.getRelic(WatcherHymnal.ID);

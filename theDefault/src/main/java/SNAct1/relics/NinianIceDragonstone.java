@@ -25,6 +25,7 @@ public class NinianIceDragonstone extends CustomRelic {
 
     public NinianIceDragonstone() {
         super(ID, IMG, OUTLINE, RelicTier.BOSS, LandingSound.MAGICAL);
+        refreshTips();
     }
 
     public String getUpdatedDescription() {

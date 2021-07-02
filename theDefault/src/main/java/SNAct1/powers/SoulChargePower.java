@@ -44,7 +44,7 @@ public class SoulChargePower extends TwoAmountPower {
         if (this.amount == 1) {
             this.description = DESCRIPTIONS[0] + this.amount + DESCRIPTIONS[1] + amount2 + DESCRIPTIONS[3];
         } else {
-            this.description = DESCRIPTIONS[0] + this.amount + DESCRIPTIONS[2] + amount2 + DESCRIPTIONS[2];
+            this.description = DESCRIPTIONS[0] + this.amount + DESCRIPTIONS[2] + amount2 + DESCRIPTIONS[3];
         }
     }
 
@@ -60,6 +60,7 @@ public class SoulChargePower extends TwoAmountPower {
         }
     }
 
+    @Override
     public float atDamageGive(float damage, DamageInfo.DamageType type) {
         if (type != DamageInfo.DamageType.NORMAL) {
             return damage;

@@ -25,9 +25,49 @@
                         " less."
                 ]
         },
+        "SNAct1:CowardlyGeneralPower": {
+                "NAME": "Cowardly General",
+                "DESCRIPTIONS": ["If this creature is #yVulnerable, it takes #b","% more damage instead of #b50% (Does NOT stack with the #yPaper #yPhrog relic). If this creature's ally dies, it #yflees and you #gwin."]
+        },
+        "SNAct1:DreadStormPower": {
+                "NAME": "Dread Storm",
+                "DESCRIPTIONS": ["Whenever this creature attacks, if it fails to deal unblocked damage, it prepares a #rstrong #rattack next turn."]
+        },
         "SNAct1:EnfeebledBodyPower": {
                 "NAME": "Enfeebled Body",
                 "DESCRIPTIONS": ["Whenever this creature loses all Block, it gains #b", " #yWeak."]
+        },
+        "SNAct1:FragrantFirePower": {
+                "NAME": "Fragrant Fire",
+                "DESCRIPTIONS": ["If you play #b",
+                        " more Attack this turn, shuffle a #rBurn into your draw pile. This debuff lasts for #b",
+                        " more Attacks this turn, shuffle a #rBurn into your draw pile. This debuff lasts for #b",
+                        " more turn.",
+                        " more turns."]
+        },
+        "SNAct1:HavocStruckConfusionDamagePower": {
+                "NAME": "Havoc-struck",
+                "DESCRIPTIONS": ["Whenever you draw a card, randomize its cost. Whenever you play a card, take #b"," damage. Wears off after playing #b",
+                        " card.",
+                        " cards."]
+        },
+        "SNAct1:HavocStruckStatusCardsPower": {
+                "NAME": "Havoc-struck",
+                "DESCRIPTIONS": ["Shuffle #b",
+                        " #rDazed into your discard pile after the first card you play each turn. If playing a card reduces your energy to 0, shuffle #b",
+                        " #rSlimed into your draw pile. This debuff lasts for #b",
+                        " #rSlimed and #b",
+                        " #rBurn into your draw pile. This debuff lasts for #b",
+                        " more turn.",
+                        " more turns."]
+        },
+        "SNAct1:LightOfJudgementCardPower": {
+                "NAME": "Light of Judgement",
+                "DESCRIPTIONS": ["In #b",
+                        " turns, deal #b",
+                        "At the end of this turn, deal #b",
+                        " damage to ALL enemies #b",
+                        " times. Damage dealt by this power is affected by #yStrength."]
         },
         "SNAct1:NinisGracePower": {
                 "NAME": "Ninis' Grace",
@@ -37,6 +77,10 @@
                         "% more Block.",
                         " times this creature gains Block, it gains #b"
                 ]
+        },
+        "SNAct1:SlaveCrownPower": {
+                "NAME": "Slave Crown",
+                "DESCRIPTIONS": ["If this creature is #yWeak, it deals #b","% less damage instead of #b25% (Does NOT stack with the #yPaper #yKrane relic). If this creature's ally dies, it #yflees and you #gwin."]
         },
         "SNAct1:SomberPower": {
                 "NAME": "Somber",
@@ -51,13 +95,51 @@
                 "NAME": "Soul Charge",
                 "DESCRIPTIONS": [
                         "For #b",
-                        " turn, whenever this creature deals direct attack damage, it deals #b",
-                        " turn, whenever this creature deals direct attack damage, it deals #b",
-                        "% more damage."
+                        " turn, this creature deals #b",
+                        " turns, this creature deals #b",
+                        "% more damage with attacks."
                 ]
+        },
+        "SNAct1:SoulEdgesCallPower": {
+                "NAME": "Soul Edge's Call",
+                "DESCRIPTIONS": [
+                        "At the start of your turn, if you don't have #ySoul #yCharge, lose #b",
+                        " HP and gain #ySoul #yCharge, increasing your Attack damage by #b",
+                        "% for #b",
+                        " turns."
+                ]
+        },
+        "SNAct1:SurroundingHyperdrivePower": {
+                "NAME": "Surrounding Hyperdrives",
+                "DESCRIPTIONS": ["At the end of your turn, take #b", " damage #b", " times. Wears off after activating."]
+        },
+        "SNAct1:TranceCardPower": {
+                "NAME": "Trance",
+                "DESCRIPTIONS": [
+                        "For #b",
+                        " turn, this creature deals #b",
+                        " turns, this creature deals #b",
+                        "% more damage with attacks and takes #b",
+                        "% less damage from incoming attacks."]
+        },
+        "SNAct1:WhiffPunisherPower": {
+                "NAME": "Whiff Punisher",
+                "DESCRIPTIONS": [
+                        "Whenever you play #b",
+                        " Attacks, this creature gains #b",
+                        " Block. When this triggers, this creature also changes intent to a #rstrong #rattack."]
         },
         "SNAct1:WielderOfDurandalPower": {
                 "NAME": "Wielder of Durandal",
                 "DESCRIPTIONS": ["This creature is your #gally. Deals #b", "% more damage against #rWayward #rIce #rDragon."]
+        },
+        "SNAct1:ZapTrapPower": {
+                "NAME": "Zap Trap",
+                "DESCRIPTIONS": ["If you play #b",
+                        " more Skill this turn, take #b",
+                        " more Skills this turn, take #b",
+                        " damage. This debuff lasts for #b",
+                        " more turn.",
+                        " more turns."]
         }
 }

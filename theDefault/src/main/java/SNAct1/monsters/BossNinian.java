@@ -97,9 +97,9 @@ public class BossNinian extends AbstractCardMonster {
     private static final int NINIAN_WEAKNESS_BONUS = 100;
 
     private int moveCounter = 1;
-    private boolean voicelinePlayedAttacking;
-    private boolean voicelinePlayedDefending;
-    private boolean voicelinePlayedUltimate;
+    private boolean voicelinePlayedAttacking = false;
+    private boolean voicelinePlayedDefending = false;
+    private boolean voicelinePlayedUltimate = false;
     public static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(SNAct1Mod.class.getName());
 
     public BossEliwood eliwood;

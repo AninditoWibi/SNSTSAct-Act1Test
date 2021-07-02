@@ -1,20 +1,27 @@
 [
   {
+    "PROPER_NAME": "Light of Judgement",
     "NAMES": [
-      "keyword",
-      "keywords"
+      "Light of Judgement",
+      "SNAct1:LightOfJudgement",
+      "light_of_judgement"
     ],
-    "DESCRIPTION": "Whenever you play a card, gain 1 dexterity this turn only."
+    "DESCRIPTION": "After a certain amount of turns, deal damage to ALL enemies. Damage affected by #yStrength."
   },
   {
-    "PROPER_NAME": "Multiword Keyword",
+    "PROPER_NAME": "Soul Charge",
     "NAMES": [
-      "Multiword Keyword",
-      "multiword_keyword",
-      "multiword_keywords",
-      "multikey",
-      "multikeyword"
+      "Soul Charge",
+      "SNAct1:SoulCharge",
+      "soul_charge"
     ],
-    "DESCRIPTION": "Make sure the first element in the NAMES is the same as your PROPER_NAME. The rest is to match keywords like the single word keyword."
+    "DESCRIPTION": "For a certain amount of turns, your Attack damage is increased by a percentage."
+  },
+  {
+  "PROPER_NAME": "Trance",
+  "NAMES": [
+    "SNAct1:Trance"
+  ],
+  "DESCRIPTION": "For a certain amount of turns, your Attacks deal #b100% more damage and you take #b50% less damage from enemy attacks."
   }
 ]

@@ -1,11 +1,15 @@
 package SNAct1;
 
 import SNAct1.CustomIntent.MassAttackIntent;
+import SNAct1.cards.enemyStatusCards.StatusFrostbitten;
+import SNAct1.cards.playerSpecialCards.CervantesSpecial;
+import SNAct1.cards.playerSpecialCards.KefkaChoice;
+import SNAct1.cards.playerSpecialCards.TerraChoice;
+import SNAct1.cards.playerSpecialCards.TerraKefkaSpecial;
+import SNAct1.monsters.*;
 import SNAct1.variables.SecondMagicNumber;
-import SNAct1.monsters.BossEliwood;
-import SNAct1.monsters.BossNinian;
-import SNAct1.monsters.BossNinianSimple;
 import SNAct1.relics.*;
+import SNAct1.variables.ThirdMagicNumber;
 import actlikeit.RazIntent.CustomIntent;
 import basemod.*;
 import basemod.helpers.RelicType;
@@ -35,15 +39,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-//TODO: DON'T MASS RENAME/REFACTOR
-//TODO: DON'T MASS RENAME/REFACTOR
-//TODO: DON'T MASS RENAME/REFACTOR
-//TODO: DON'T MASS RENAME/REFACTOR
 // Please don't just mass replace "theDefault" with "yourMod" everywhere.
 // It'll be a bigger pain for you. You only need to replace it in 4 places.
 // I comment those places below, under the place where you set your ID.
 
-//TODO: FIRST THINGS FIRST: RENAME YOUR PACKAGE AND ID NAMES FIRST-THING!!!
 // Right click the package (Open the project pane on the left. Folder with black dot on it. The name's at the very top) -> Refactor -> Rename, and name it whatever you wanna call your mod.
 // Scroll down in this file. Change the ID from "theDefault:" to "yourModName:" or whatever your heart desires (don't use spaces). Dw, you'll see it.
 // In the JSON strings (resources>localization>eng>[all them files] make sure they all go "yourModName:" rather than "theDefault", and change to "yourmodname" rather than "thedefault".
@@ -109,20 +108,6 @@ public class SNAct1Mod implements
     // Character Color
     public static final Color DEFAULT_GRAY = CardHelper.getColor(64.0f, 70.0f, 70.0f);
 
-    // Card backgrounds - The actual rectangular card.
-    private static final String ATTACK_DEFAULT_GRAY = "SNAct1Resources/images/512/bg_attack_default_gray.png";
-    private static final String SKILL_DEFAULT_GRAY = "SNAct1Resources/images/512/bg_skill_default_gray.png";
-    private static final String POWER_DEFAULT_GRAY = "SNAct1Resources/images/512/bg_power_default_gray.png";
-
-    private static final String ENERGY_ORB_DEFAULT_GRAY = "SNAct1Resources/images/512/card_default_gray_orb.png";
-    private static final String CARD_ENERGY_ORB = "SNAct1Resources/images/512/card_small_orb.png";
-
-    private static final String ATTACK_DEFAULT_GRAY_PORTRAIT = "SNAct1Resources/images/1024/bg_attack_default_gray.png";
-    private static final String SKILL_DEFAULT_GRAY_PORTRAIT = "SNAct1Resources/images/1024/bg_skill_default_gray.png";
-    private static final String POWER_DEFAULT_GRAY_PORTRAIT = "SNAct1Resources/images/1024/bg_power_default_gray.png";
-    private static final String ENERGY_ORB_DEFAULT_GRAY_PORTRAIT = "SNAct1Resources/images/1024/card_default_gray_orb.png";
-
-
     //Mod Badge - A small icon that appears in the mod settings menu next to your mod.
     public static final String BADGE_IMAGE = getModID() + "Resources/images/Badge.png";
 
@@ -154,23 +139,23 @@ public class SNAct1Mod implements
     }
 
     public static String makeBossVoiceLinePath(String resourcePath) {
-        return modID + "Resources/audio/bossvoice/" + resourcePath;
+        return getModID() + "Resources/audio/bossvoice/" + resourcePath;
     }
 
     public static String makeMusicPath(String resourcePath) {
-        return modID + "Resources/audio/music/" + resourcePath;
+        return getModID() + "Resources/audio/music/" + resourcePath;
     }
 
     public static String makeMonsterPath(String resourcePath) {
-        return modID + "Resources/images/monsters/" + resourcePath;
+        return getModID() + "Resources/images/monsters/" + resourcePath;
     }
 
     public static String makeUIPath(String resourcePath) {
-        return modID + "Resources/images/ui/" + resourcePath;
+        return getModID() + "Resources/images/ui/" + resourcePath;
     }
 
     public static String makeImagePath(String resourcePath) {
-        return modID + "Resources/images/" + resourcePath;
+        return getModID() + "Resources/images/" + resourcePath;
     }
 
     // =============== /INPUT TEXTURE LOCATION/ =================
@@ -255,27 +240,29 @@ public class SNAct1Mod implements
     public void receivePostInitialize() {
         logger.info("Loading badge image and mod options");
 
-        // Load the Mod Badge
         Texture badgeTexture = TextureLoader.getTexture(BADGE_IMAGE);
-
-        // Create the Mod Menu
         ModPanel settingsPanel = new ModPanel();
-
         BaseMod.registerModBadge(badgeTexture, MODNAME, AUTHOR, DESCRIPTION, settingsPanel);
 
         //custom Intent for terra, kefka, ninian
         CustomIntent.add(new MassAttackIntent());
 
+        // if or when the act is done, transfer these to addBoss calls instead of addMonster calls
         BaseMod.addMonster(BossNinian.ID, "Boss-NinianEliwood", () -> new MonsterGroup(
                 new AbstractMonster[]{
                         new BossEliwood(-550.0F, 0.0F),
                         new BossNinian(200.0F, 0.0F)
                 }));
-
-        BaseMod.addMonster(BossNinianSimple.ID, "Boss-NinianEliwood", () -> new MonsterGroup(
+        BaseMod.addMonster(BossCervantes.ID, "Boss-Cervantes", () -> new MonsterGroup(
                 new AbstractMonster[]{
-                        new BossNinianSimple(180.0F, 0.0F)
+                        new BossCervantes(50.0F, 0.0F)
                 }));
+        BaseMod.addMonster(BossKefka.ID, "Boss-TerraKefka", () -> new MonsterGroup(
+                new AbstractMonster[]{
+                        new BossKefka(70.0F, 0.0F),
+                        new BossTerra(-400.0F, 0.0F)
+                }));
+
 
         logger.info("Done loading badge Image and mod options");
     }
@@ -287,7 +274,7 @@ public class SNAct1Mod implements
 
     @Override
     public void receiveEditRelics() {
-
+        // boss relics
         BaseMod.addRelic(new CervantesAcheronAndNirvana(), RelicType.SHARED);
         UnlockTracker.markRelicAsSeen(CervantesAcheronAndNirvana.ID);
         BaseMod.addRelic(new NinianIceDragonstone(), RelicType.SHARED);
@@ -299,7 +286,6 @@ public class SNAct1Mod implements
         UnlockTracker.markRelicAsSeen(IroncladSacredFlame.ID);
         BaseMod.addRelic(new WatcherHymnal(), RelicType.PURPLE);
         UnlockTracker.markRelicAsSeen(WatcherHymnal.ID);
-
     }
 
     // ================ /ADD RELICS/ ===================
@@ -316,27 +302,28 @@ public class SNAct1Mod implements
         logger.info("Add variables");
         // Add the Custom Dynamic variables
         BaseMod.addDynamicVariable(new SecondMagicNumber());
+        BaseMod.addDynamicVariable(new ThirdMagicNumber());
 
         logger.info("Adding cards");
-        // Add the cards
-        // Don't delete these default cards yet. You need 1 of each type and rarity (technically) for your game not to crash
-        // when generating card rewards/shop screen items.
+        /*
+        // enemy special cards
+        BaseMod.addCard(new CervantesSpecial());
+        UnlockTracker.markCardAsSeen(CervantesSpecial.ID);
+        BaseMod.addCard(new TerraKefkaSpecial());
+        UnlockTracker.markCardAsSeen(TerraKefkaSpecial.ID);
+        BaseMod.addCard(new TerraChoice());
+        UnlockTracker.markCardAsSeen(TerraChoice.ID);
+        BaseMod.addCard(new KefkaChoice());
+        UnlockTracker.markCardAsSeen(KefkaChoice.ID);
+        // mod-added statuses
+        BaseMod.addCard(new StatusFrostbitten());
+        UnlockTracker.markCardAsSeen(StatusFrostbitten.ID);
+        */
 
-        // This method automatically adds any cards so you don't have to manually load them 1 by 1
-        // For more specific info, including how to exclude cards from being added:
-        // https://github.com/daviscook477/BaseMod/wiki/AutoAdd
-
-        // The ID for this function isn't actually your modid as used for prefixes/by the getModID() method.
-        // It's the mod id you give MTS in ModTheSpire.json - by default your artifact ID in your pom.xml
-
-        new AutoAdd("SNAct1") // ${project.artifactId}
-                .packageFilter(AbstractSNActCard.class) // filters to any class in the same package as AbstractDefaultCard, nested packages included
+        new AutoAdd("SNAct1")
+                .packageFilter(AbstractSNActCard.class)
                 .setDefaultSeen(true)
                 .cards();
-
-        // .setDefaultSeen(true) unlocks the cards
-        // This is so that they are all "seen" in the library,
-        // for people who like to look at the card list before playing your mod
 
         logger.info("Done adding cards!");
     }

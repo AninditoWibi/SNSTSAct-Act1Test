@@ -2,17 +2,7 @@
   "SNAct1:CervantesAcheronAndNirvana": {
     "NAME": "Acheron and Nirvana",
     "FLAVOR": "A pair of swords bearing fell power that once belonged to a vicious, power-hungry pirate captain.",
-    "DESCRIPTIONS": [
-      "Starts with #b",
-      " charges (max. #b",
-      "). Gain #b",
-      " charge for completing a normal combat, #b",
-      " charges for defeating an elite, and #b",
-      " charges for defeating a boss. Once per combat, right click to activate: Spend #b",
-      " charges to gain #b",
-      " #yStrength and #b",
-      " #ySoul #yCharge."
-    ]
+    "DESCRIPTIONS": ["The first time each turn you deal unblocked attack damage to an enemy that has a debuff, gain [E] ."]
   },
   "SNAct1:IroncladSacredFlame": {
     "NAME": "Sacred Flame",
